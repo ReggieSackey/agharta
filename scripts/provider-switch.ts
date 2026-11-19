@@ -29,7 +29,7 @@ async function creds() {
     headers: { 'content-type': 'application/json', authorization: `Bearer ${accessToken}` },
     body: JSON.stringify({
       selectedDeploymentName: deploymentName,
-      projectSelection: { kind: 'teamAndProjectSlugs', teamSlug: 'reggiesackey', projectSlug: 'aghearta' },
+      projectSelection: { kind: 'teamAndProjectSlugs', teamSlug: TEAM_SLUG, projectSlug: PROJECT_SLUG },
     }),
   });
   if (!res.ok) throw new Error(`authorize failed ${res.status}`);

@@ -24,6 +24,15 @@ import type { UserIdentityAttributes } from 'convex/server';
 
 const api = anyApi;
 
+// Your Convex team/project slugs (dashboard URL shows them):
+//   https://dashboard.convex.dev/<teamSlug>/<projectSlug>
+// Set via environment or .env.local (gitignored):
+const TEAM_SLUG = process.env.CONVEX_TEAM_SLUG ?? '';
+const PROJECT_SLUG = process.env.CONVEX_PROJECT_SLUG ?? '';
+if (!TEAM_SLUG || !PROJECT_SLUG) {
+  throw new Error('Set CONVEX_TEAM_SLUG and CONVEX_PROJECT_SLUG (from your Convex dashboard URL) — e.g. in .env.local');
+}
+
 async function getDeploymentCredentials() {
   const deploymentRef = process.env.CONVEX_DEPLOYMENT ?? '';
   if (!deploymentRef) throw new Error('CONVEX_DEPLOYMENT not set — run `npx convex dev` first');
@@ -34,7 +43,7 @@ async function getDeploymentCredentials() {
     headers: { 'content-type': 'application/json', authorization: `Bearer ${accessToken}` },
     body: JSON.stringify({
       selectedDeploymentName: deploymentName,
-      projectSelection: { kind: 'teamAndProjectSlugs', teamSlug: 'reggiesackey', projectSlug: 'aghearta' },
+      projectSelection: { kind: 'teamAndProjectSlugs', teamSlug: TEAM_SLUG, projectSlug: PROJECT_SLUG },
     }),
   });
   if (!res.ok) throw new Error(`authorize failed ${res.status}: ${await res.text()}`);
