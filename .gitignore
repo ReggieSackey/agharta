@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.next/
+.env
+.env.local
+.env.*.local
+*.tsbuildinfo
+coverage/
+playwright-report/
+test-results/
+.vercel/
+.DS_Store
+# Convex
+.convex/

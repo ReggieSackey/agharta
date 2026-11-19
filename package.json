@@ -1,0 +1,28 @@
+{
+  "name": "agharta",
+  "private": true,
+  "description": "A self-improving creative search engine.",
+  "packageManager": "pnpm@12.21.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev:web": "pnpm --filter @agharta/web dev",
+    "dev:convex": "npx convex dev --once",
+    "dev:mcp": "pnpm --filter @agharta/mcp dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "test:e2e": "pnpm --filter @agharta/web test:e2e",
+    "test:convex": "npx tsx scripts/convex-integration.ts",
+    "benchmark": "npx tsx benchmarks/runner.ts",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "prettier": "^3.4.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
