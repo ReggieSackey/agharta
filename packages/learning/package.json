@@ -1,0 +1,31 @@
+{
+  "name": "@agharta/learning",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./stats": "./src/stats.ts",
+    "./allocation": "./src/allocation.ts",
+    "./credit": "./src/credit.ts",
+    "./challenger": "./src/challenger.ts",
+    "./promotion": "./src/promotion.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@agharta/shared": "workspace:*",
+    "@agharta/core": "workspace:*",
+    "@agharta/evaluation": "workspace:*",
+    "zod": "^4.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^5.1.0"
+  }
+}
