@@ -1,6 +1,6 @@
 # AGHARTA
 
-**A self-improving creative search engine.** Give it a hard, open-ended problem. It searches for genuinely different solutions through multiple creative strategies, tracks how every idea was formed, learns which strategies actually work, and shows you the evidence — all through a web dashboard or an [MCP](https://modelcontextprotocol.io) client.
+**Agharta makes LLMs more creative — measurably.** Instead of asking a model once and hoping, it runs a *creative search*: multiple operators attack the problem from different angles, every idea carries provenance, evaluation is separated from the model's opinion of itself, and a learning loop shifts generation toward the strategies that actually produce results. Works with any major model provider, through a web dashboard or an [MCP](https://modelcontextprotocol.io) client.
 
 > *Agharta* is named after the 1975 Miles Davis album — an hour of improvised, structured searching by a small ensemble. That's the spirit: improvisation with provenance.
 
@@ -8,7 +8,7 @@
 
 ## The problem it solves
 
-Ask an AI for ideas on a hard problem and you get a list of the six most predictable answers, with no memory of what worked last time. Agharta treats idea generation as a **search problem**, not a question:
+Ask an LLM for ideas on a hard problem and you get the same predictable answers from every angle — one prompt, near-duplicates, no memory of what worked last time. Agharta treats idea generation as a **search problem** that surrounds the model with structure, instead of hoping the prompt alone produces creativity:
 
 - **One prompt → near-duplicates.** A search → structurally different candidates.
 - **Where did this idea come from?** Every idea carries its full ancestry: which strategy created it, from which parents, inspired by which source concepts.
