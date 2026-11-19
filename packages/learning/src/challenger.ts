@@ -23,6 +23,20 @@ export const OptimizerOutputSchema = z.object({
 });
 export type OptimizerOutput = z.infer<typeof OptimizerOutputSchema>;
 
+/**
+ * Deterministic fallback proposal when no structured proposal is supplied:
+ * tilt allocation toward analogy (the broadest cross-domain operator) while
+ * keeping prompts unchanged. Small, reviewable, and always a real change.
+ */
+export function fallbackProposal(): OptimizerOutput {
+  return {
+    rationale:
+      'Fallback optimizer tweak: raise analogy weight to shift generation toward cross-domain transfer, the operator class with the widest source library coverage; all other knobs unchanged.',
+    promptChange: null,
+    weightChange: { operator: 'analogy', newWeight: 0.45 },
+  };
+}
+
 /** Build a challenger from champion + proposed change (pure, versioned). */
 export function buildChallenger(champion: SearchStrategy, change: OptimizerOutput, id: string): SearchStrategy {
   const challenger: SearchStrategy = structuredClone(champion);

@@ -8,6 +8,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./models": "./src/models.ts",
+    "./models.openai": "./src/models.openai.ts",
     "./operators": "./src/operators.ts",
     "./concepts": "./src/concepts.ts",
     "./population": "./src/population.ts",
@@ -18,7 +19,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "lint": "eslint src"
+    "lint": "pnpm -w exec eslint packages/core/src"
   },
   "dependencies": {
     "@agharta/shared": "workspace:*",
@@ -30,8 +31,12 @@
     "@ai-sdk/openai": ">=4"
   },
   "peerDependenciesMeta": {
-    "ai": { "optional": true },
-    "@ai-sdk/openai": { "optional": true }
+    "ai": {
+      "optional": true
+    },
+    "@ai-sdk/openai": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "typescript": "^5.7.0",

@@ -16,17 +16,10 @@ import type {
   SearchStrategy,
   Usage,
 } from '@agharta/shared';
-import {
-  addUsage,
-  budgetFor,
-  EMPTY_USAGE,
-  makeId,
-  mulberry32,
-  OPERATOR_IDS,
-} from '@agharta/shared';
+import { addUsage, EMPTY_USAGE, makeId, mulberry32, OPERATOR_IDS } from '@agharta/shared';
 import type { ModelAdapter } from './models';
 import { runOperator, OPERATORS, type ProblemContext } from './operators';
-import { selectDiverse, dedupe, DEFAULT_SELECT_OPTIONS, type Candidate, type SelectOutcome } from './population';
+import { selectDiverse, dedupe, DEFAULT_SELECT_OPTIONS, type Candidate } from './population';
 import { allocateOpportunities } from './strategies';
 
 // ---------------------------------------------------------------------------
@@ -133,10 +126,10 @@ export async function runExploration(cfg: EngineConfig, rt: EngineRuntime): Prom
       if (await rt.shouldCancel()) { cancelled = true; break; }
 
       // recombination needs two distinct-mechanism parents
-      let parents = pickParents(parentsPool, rng);
+      const parents = pickParents(parentsPool, rng);
       if (op === 'recombination' && parents.length < 2) continue;
 
-      const result = await runOperator(OPERATORS[op], {
+      const result = await runOperator(OPERATORS[op]!, {
         problem: cfg.problem,
         parents,
         seed: cfg.seed + gen * 1000 + hashOp(op),
@@ -159,7 +152,7 @@ export async function runExploration(cfg: EngineConfig, rt: EngineRuntime): Prom
         }
         seenTitles.add(titleKey);
         const idea: Idea = {
-          id: makeId('idea'),
+          id: makeId('idea', `${cfg.explorationId}:${gen}:${op}:${titleKey}`),
           explorationId: cfg.explorationId,
           title: out.title,
           intervention: out.intervention,
@@ -300,7 +293,7 @@ function fnv1aStr(s: string): string {
 
 function stubIdea(explorationId: string, out: OperatorOutput, op: OperatorId, gen: number): Idea {
   return {
-    id: makeId('idea_rejected'),
+    id: makeId('idea_rejected', `${explorationId}:${gen}:${op}:${out.title.trim().toLowerCase()}`),
     explorationId,
     title: out.title,
     intervention: out.intervention,

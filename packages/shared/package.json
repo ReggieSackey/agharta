@@ -13,7 +13,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "lint": "eslint src"
+    "lint": "pnpm -w exec eslint packages/shared/src"
   },
   "devDependencies": {
     "typescript": "^5.7.0",

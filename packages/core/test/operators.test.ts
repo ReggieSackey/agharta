@@ -18,7 +18,7 @@ function ctx(overrides: Partial<OperatorRunContext> = {}): OperatorRunContext {
 
 describe('operators', () => {
   it('divergent produces structured OperatorOutput records', async () => {
-    const res = await runOperator(OPERATORS.divergent, ctx(), createFakeModel(), 3, 't1');
+    const res = await runOperator(OPERATORS.divergent!, ctx(), createFakeModel(), 3, 't1');
     expect(res.outputs.length).toBeGreaterThanOrEqual(1);
     for (const o of res.outputs) {
       expect(o.title.length).toBeGreaterThan(3);
@@ -30,14 +30,14 @@ describe('operators', () => {
   });
 
   it('analogy offers curated sources and preserves provenance', async () => {
-    const res = await runOperator(OPERATORS.analogy, ctx(), createFakeModel(), 3, 't2');
+    const res = await runOperator(OPERATORS.analogy!, ctx(), createFakeModel(), 3, 't2');
     expect(res.offeredSourceIds.length).toBeGreaterThanOrEqual(2);
     const offered = res.offeredSourceIds.map((id) => SOURCE_CONCEPTS.find((c) => c.id === id)!);
     for (const c of offered) expect(c.verified).toBe(true);
   });
 
   it('inversion records what was inverted and repair survival', async () => {
-    const res = await runOperator(OPERATORS.inversion, ctx(), createFakeModel(), 3, 't3');
+    const res = await runOperator(OPERATORS.inversion!, ctx(), createFakeModel(), 3, 't3');
     const inversions = res.outputs.filter((o) => o.invertedConstraint !== undefined);
     expect(inversions.length).toBeGreaterThan(0);
     for (const o of inversions) expect(typeof o.survivedRepair).toBe('boolean');
@@ -48,7 +48,7 @@ describe('operators', () => {
       { id: 'p1', title: 'Cache tiering for quotes', causalMechanism: 'frequency-based cost splitting', intervention: 'x', operatorId: 'divergent' as const },
       { id: 'p2', title: 'WIP limits on approvals', causalMechanism: 'scarcity forcing surfacing', intervention: 'y', operatorId: 'inversion' as const },
     ];
-    const res = await runOperator(OPERATORS.recombination, ctx({ parents }), createFakeModel(), 2, 't4');
+    const res = await runOperator(OPERATORS.recombination!, ctx({ parents }), createFakeModel(), 2, 't4');
     expect(res.outputs.length).toBeGreaterThanOrEqual(1);
   });
 
@@ -71,6 +71,6 @@ describe('operators', () => {
         modelId: 'evil',
       }),
     };
-    await expect(runOperator(OPERATORS.analogy, ctx(), evil as never, 1, 't5')).rejects.toThrow(/unknown source concept/);
+    await expect(runOperator(OPERATORS.analogy!, ctx(), evil as never, 1, 't5')).rejects.toThrow(/unknown source concept/);
   });
 });

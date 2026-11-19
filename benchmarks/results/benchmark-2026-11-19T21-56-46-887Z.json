@@ -1,0 +1,1835 @@
+{
+  "benchmarkVersion": "bench-v1",
+  "model": "fake-deterministic-v1",
+  "seeds": [
+    11,
+    22,
+    33
+  ],
+  "generatedAt": "2026-11-19T21:56:44.203Z",
+  "modes": {
+    "single_prompt": [
+      {
+        "problemId": "bp_ci_flaky_tests",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 5,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4696,
+          "meanNovelty": 3.5,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_ci_flaky_tests",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 2,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4642,
+          "meanNovelty": 2.6667,
+          "bestNovelty": 4,
+          "meanFeasibility": 3.5,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_ci_flaky_tests",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 1,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.489,
+          "meanNovelty": 3.3333,
+          "bestNovelty": 5,
+          "meanFeasibility": 2.5,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_onboarding_drop",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 4,
+          "qualifiedUniqueIdeas": 2,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.2918,
+          "meanNovelty": 3,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_onboarding_drop",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4746,
+          "meanNovelty": 3.5,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_onboarding_drop",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 5,
+          "qualifiedUniqueIdeas": 4,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4805,
+          "meanNovelty": 2.8333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.1667,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_support_scaling",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 4,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4355,
+          "meanNovelty": 3.6667,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_support_scaling",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 4,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4526,
+          "meanNovelty": 3.5,
+          "bestNovelty": 5,
+          "meanFeasibility": 4.3333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_support_scaling",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 2,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.3666,
+          "meanNovelty": 2.6667,
+          "bestNovelty": 4,
+          "meanFeasibility": 3.6667,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_incident_mttm",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 5,
+          "qualifiedUniqueIdeas": 4,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4851,
+          "meanNovelty": 3,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_incident_mttm",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 5,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4558,
+          "meanNovelty": 3.1667,
+          "bestNovelty": 5,
+          "meanFeasibility": 2.8333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_incident_mttm",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 4,
+          "qualifiedUniqueIdeas": 2,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4108,
+          "meanNovelty": 2.3333,
+          "bestNovelty": 4,
+          "meanFeasibility": 3.3333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_meeting_load",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 4,
+          "qualifiedUniqueIdeas": 1,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4279,
+          "meanNovelty": 2.5,
+          "bestNovelty": 5,
+          "meanFeasibility": 2.8333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_meeting_load",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 5,
+          "qualifiedUniqueIdeas": 1,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.418,
+          "meanNovelty": 2,
+          "bestNovelty": 2,
+          "meanFeasibility": 3.8333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_meeting_load",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 5,
+          "qualifiedUniqueIdeas": 1,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4683,
+          "meanNovelty": 3.5,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.6667,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_pricing_packaging",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4673,
+          "meanNovelty": 3.3333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_pricing_packaging",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4604,
+          "meanNovelty": 4,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_pricing_packaging",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 5,
+          "qualifiedUniqueIdeas": 2,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.3684,
+          "meanNovelty": 2.6667,
+          "bestNovelty": 4,
+          "meanFeasibility": 3.5,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_data_quality",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 5,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4252,
+          "meanNovelty": 2.6667,
+          "bestNovelty": 5,
+          "meanFeasibility": 4,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_data_quality",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 5,
+          "qualifiedUniqueIdeas": 2,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4707,
+          "meanNovelty": 2.5,
+          "bestNovelty": 5,
+          "meanFeasibility": 3,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_data_quality",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 2,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.3863,
+          "meanNovelty": 2.8333,
+          "bestNovelty": 4,
+          "meanFeasibility": 3.8333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_cross_team_sludge",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 5,
+          "qualifiedUniqueIdeas": 4,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4014,
+          "meanNovelty": 3,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_cross_team_sludge",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 5,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4874,
+          "meanNovelty": 2.8333,
+          "bestNovelty": 4,
+          "meanFeasibility": 3,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_cross_team_sludge",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 4,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.3794,
+          "meanNovelty": 2.6667,
+          "bestNovelty": 4,
+          "meanFeasibility": 3.6667,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_skill_plateau",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.5166,
+          "meanNovelty": 4.3333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_skill_plateau",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.5205,
+          "meanNovelty": 3.1667,
+          "bestNovelty": 4,
+          "meanFeasibility": 3.3333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_skill_plateau",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4853,
+          "meanNovelty": 3.1667,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_urban_delivery",
+        "domain": "policy",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 4,
+          "qualifiedUniqueIdeas": 2,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.2975,
+          "meanNovelty": 3.5,
+          "bestNovelty": 5,
+          "meanFeasibility": 2.8333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_urban_delivery",
+        "domain": "policy",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4284,
+          "meanNovelty": 3.3333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.8333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_urban_delivery",
+        "domain": "policy",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 4,
+          "qualifiedUniqueIdeas": 3,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4655,
+          "meanNovelty": 2.8333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_hiring_pipeline",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 4,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.472,
+          "meanNovelty": 4,
+          "bestNovelty": 5,
+          "meanFeasibility": 4,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_hiring_pipeline",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 4,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.5197,
+          "meanNovelty": 4.1667,
+          "bestNovelty": 5,
+          "meanFeasibility": 2.8333,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_hiring_pipeline",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 6,
+          "validIdeas": 6,
+          "uniqueMechanisms": 6,
+          "qualifiedUniqueIdeas": 2,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4586,
+          "meanNovelty": 3.5,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5,
+          "latencyMs": 5,
+          "costUsd": 0
+        }
+      }
+    ],
+    "repeated_sampling": [
+      {
+        "problemId": "bp_ci_flaky_tests",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 11,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4696,
+          "meanNovelty": 2.7083,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.7083,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_ci_flaky_tests",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 19,
+          "qualifiedUniqueIdeas": 9,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4642,
+          "meanNovelty": 2.7083,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5417,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_ci_flaky_tests",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 16,
+          "qualifiedUniqueIdeas": 6,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.489,
+          "meanNovelty": 2.4167,
+          "bestNovelty": 4,
+          "meanFeasibility": 3.2083,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_onboarding_drop",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 9,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.2918,
+          "meanNovelty": 2.7917,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.625,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_onboarding_drop",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 15,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4746,
+          "meanNovelty": 2.9583,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5417,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_onboarding_drop",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 18,
+          "qualifiedUniqueIdeas": 11,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4805,
+          "meanNovelty": 2.9583,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.2917,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_support_scaling",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 20,
+          "qualifiedUniqueIdeas": 11,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4355,
+          "meanNovelty": 3.25,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.4167,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_support_scaling",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 12,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4526,
+          "meanNovelty": 2.75,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.6667,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_support_scaling",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 13,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.3666,
+          "meanNovelty": 2.5,
+          "bestNovelty": 4,
+          "meanFeasibility": 3.6667,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_incident_mttm",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 9,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4851,
+          "meanNovelty": 2.6667,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5833,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_incident_mttm",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 16,
+          "qualifiedUniqueIdeas": 7,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4558,
+          "meanNovelty": 2.375,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.375,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_incident_mttm",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 15,
+          "qualifiedUniqueIdeas": 11,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4108,
+          "meanNovelty": 2.6667,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_meeting_load",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 14,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4279,
+          "meanNovelty": 2.375,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_meeting_load",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 18,
+          "qualifiedUniqueIdeas": 9,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.418,
+          "meanNovelty": 2.625,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.6667,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_meeting_load",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 16,
+          "qualifiedUniqueIdeas": 6,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4683,
+          "meanNovelty": 2.5,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5417,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_pricing_packaging",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 7,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4673,
+          "meanNovelty": 2.75,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.125,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_pricing_packaging",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 23,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 11,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0.0417,
+          "topKDiversity": 0.4604,
+          "meanNovelty": 2.9565,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.8696,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_pricing_packaging",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 20,
+          "qualifiedUniqueIdeas": 13,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.3684,
+          "meanNovelty": 3.2083,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.7917,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_data_quality",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 16,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4252,
+          "meanNovelty": 2.4167,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.4167,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_data_quality",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 16,
+          "qualifiedUniqueIdeas": 5,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4707,
+          "meanNovelty": 2.625,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.2083,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_data_quality",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 18,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.3863,
+          "meanNovelty": 2.5833,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.75,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_cross_team_sludge",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 16,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4014,
+          "meanNovelty": 2.5833,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.2083,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_cross_team_sludge",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 23,
+          "uniqueMechanisms": 16,
+          "qualifiedUniqueIdeas": 11,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0.0417,
+          "topKDiversity": 0.4874,
+          "meanNovelty": 2.5217,
+          "bestNovelty": 4,
+          "meanFeasibility": 3.5217,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_cross_team_sludge",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 13,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.3794,
+          "meanNovelty": 2.625,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.9583,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_skill_plateau",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.5166,
+          "meanNovelty": 2.6667,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.2083,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_skill_plateau",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.5205,
+          "meanNovelty": 2.9167,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5833,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_skill_plateau",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 20,
+          "qualifiedUniqueIdeas": 6,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4853,
+          "meanNovelty": 2.8333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.4583,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_urban_delivery",
+        "domain": "policy",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 14,
+          "qualifiedUniqueIdeas": 5,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.2975,
+          "meanNovelty": 2.3333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_urban_delivery",
+        "domain": "policy",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 18,
+          "qualifiedUniqueIdeas": 12,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4284,
+          "meanNovelty": 3.25,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.7083,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_urban_delivery",
+        "domain": "policy",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 18,
+          "qualifiedUniqueIdeas": 10,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4655,
+          "meanNovelty": 2.8333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.4167,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_hiring_pipeline",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 15,
+          "qualifiedUniqueIdeas": 6,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.472,
+          "meanNovelty": 2.4583,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5833,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_hiring_pipeline",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 10,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.5197,
+          "meanNovelty": 2.5,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_hiring_pipeline",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 24,
+          "validIdeas": 24,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 9,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4586,
+          "meanNovelty": 2.6667,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.625,
+          "latencyMs": 17,
+          "costUsd": 0
+        }
+      }
+    ],
+    "full_engine": [
+      {
+        "problemId": "bp_ci_flaky_tests",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 14,
+          "qualifiedUniqueIdeas": 6,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4577,
+          "meanNovelty": 2.5556,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.6667,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_ci_flaky_tests",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 6,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4763,
+          "meanNovelty": 2.9444,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.4444,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_ci_flaky_tests",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 7,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.3776,
+          "meanNovelty": 2.7778,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3333,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_onboarding_drop",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 7,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.46,
+          "meanNovelty": 2.8889,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.6667,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_onboarding_drop",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 14,
+          "qualifiedUniqueIdeas": 7,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4681,
+          "meanNovelty": 3.0556,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.4444,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_onboarding_drop",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4362,
+          "meanNovelty": 2.6111,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.7778,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_support_scaling",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 15,
+          "qualifiedUniqueIdeas": 6,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4306,
+          "meanNovelty": 2.8889,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5556,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_support_scaling",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 15,
+          "qualifiedUniqueIdeas": 5,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.5016,
+          "meanNovelty": 3.0556,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3889,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_support_scaling",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 14,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4916,
+          "meanNovelty": 3.3333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.4444,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_incident_mttm",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 14,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4822,
+          "meanNovelty": 2.9444,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5556,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_incident_mttm",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 14,
+          "qualifiedUniqueIdeas": 6,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4749,
+          "meanNovelty": 3.1667,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.2222,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_incident_mttm",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 12,
+          "qualifiedUniqueIdeas": 10,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4926,
+          "meanNovelty": 2.8889,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.8333,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_meeting_load",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 11,
+          "qualifiedUniqueIdeas": 9,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.3752,
+          "meanNovelty": 2.8333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.7778,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_meeting_load",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 10,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.472,
+          "meanNovelty": 2.7778,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.8889,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_meeting_load",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 15,
+          "qualifiedUniqueIdeas": 13,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.3677,
+          "meanNovelty": 3.1111,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.8333,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_pricing_packaging",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 14,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.439,
+          "meanNovelty": 3.2778,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.8333,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_pricing_packaging",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 14,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4552,
+          "meanNovelty": 3.5556,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_pricing_packaging",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 12,
+          "qualifiedUniqueIdeas": 6,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4312,
+          "meanNovelty": 3.0556,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3889,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_data_quality",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 11,
+          "qualifiedUniqueIdeas": 1,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4244,
+          "meanNovelty": 2.3333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_data_quality",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 12,
+          "qualifiedUniqueIdeas": 5,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4463,
+          "meanNovelty": 2.8889,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.1667,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_data_quality",
+        "domain": "engineering",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 7,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4941,
+          "meanNovelty": 3.7222,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.4444,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_cross_team_sludge",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 9,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4672,
+          "meanNovelty": 3.3333,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5556,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_cross_team_sludge",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 12,
+          "qualifiedUniqueIdeas": 8,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4601,
+          "meanNovelty": 2.7222,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.7222,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_cross_team_sludge",
+        "domain": "product",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 5,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.5103,
+          "meanNovelty": 2.4444,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3333,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_skill_plateau",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 5,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.5145,
+          "meanNovelty": 2.8889,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3333,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_skill_plateau",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 7,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4069,
+          "meanNovelty": 3,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3889,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_skill_plateau",
+        "domain": "personal",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 10,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4944,
+          "meanNovelty": 3.2222,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5556,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_urban_delivery",
+        "domain": "policy",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 14,
+          "qualifiedUniqueIdeas": 5,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4371,
+          "meanNovelty": 2.6667,
+          "bestNovelty": 5,
+          "meanFeasibility": 3,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_urban_delivery",
+        "domain": "policy",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 17,
+          "qualifiedUniqueIdeas": 10,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4591,
+          "meanNovelty": 3.2222,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.2778,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_urban_delivery",
+        "domain": "policy",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 4,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4775,
+          "meanNovelty": 2.6111,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.0556,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_hiring_pipeline",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 14,
+          "qualifiedUniqueIdeas": 11,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4306,
+          "meanNovelty": 3.1111,
+          "bestNovelty": 5,
+          "meanFeasibility": 4.0556,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_hiring_pipeline",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 9,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.4718,
+          "meanNovelty": 2.8889,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.5556,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      },
+      {
+        "problemId": "bp_hiring_pipeline",
+        "domain": "business",
+        "metrics": {
+          "generatedIdeas": 18,
+          "validIdeas": 18,
+          "uniqueMechanisms": 13,
+          "qualifiedUniqueIdeas": 6,
+          "qualifiedPerDollar": 0,
+          "duplicateRate": 0,
+          "topKDiversity": 0.473,
+          "meanNovelty": 2.8889,
+          "bestNovelty": 5,
+          "meanFeasibility": 3.3889,
+          "latencyMs": 54,
+          "costUsd": 0
+        }
+      }
+    ]
+  },
+  "summary": {
+    "single_prompt": {
+      "runs": 33,
+      "meanGenerated": 6,
+      "meanUniqueMechanisms": 5.303,
+      "meanQualifiedUnique": 2.697,
+      "meanTopKDiversity": 0.4425,
+      "meanNovelty": 3.1414,
+      "meanFeasibility": 3.3939,
+      "meanDuplicateRate": 0,
+      "totalCostUsd": 0
+    },
+    "repeated_sampling": {
+      "runs": 33,
+      "meanGenerated": 24,
+      "meanUniqueMechanisms": 16.9091,
+      "meanQualifiedUnique": 9.0303,
+      "meanTopKDiversity": 0.4425,
+      "meanNovelty": 2.6963,
+      "meanFeasibility": 3.5081,
+      "meanDuplicateRate": 0.0025,
+      "totalCostUsd": 0
+    },
+    "full_engine": {
+      "runs": 33,
+      "meanGenerated": 18,
+      "meanUniqueMechanisms": 13.4545,
+      "meanQualifiedUnique": 7.2727,
+      "meanTopKDiversity": 0.4563,
+      "meanNovelty": 2.9596,
+      "meanFeasibility": 3.5118,
+      "meanDuplicateRate": 0,
+      "totalCostUsd": 0
+    }
+  }
+}

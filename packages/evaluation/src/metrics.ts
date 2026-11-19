@@ -58,8 +58,6 @@ export function computeFromProxies(
   thresholds: QualifiedThresholds
 ): ExplorationMetrics {
   const generated = rows.length;
-  const uniqueTitles = new Set(rows.map((r) => r.idea.title.trim().toLowerCase()));
-  const uniqueRows = rows.filter((r) => r.idea.title.trim().toLowerCase() === [...uniqueTitles][0] || true);
   const unique = dedupRows(rows);
   const mechanisms = new Set(unique.map((r) => mechanismKey(r.idea)));
   const qualified = unique.filter(

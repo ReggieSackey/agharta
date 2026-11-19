@@ -7,7 +7,7 @@
  *  - inversion:   invert/relax a constraint, then repair against hard constraints
  *  - recombination: fuse two genuinely distinct parents, record incompatibilities
  */
-import type { Idea, OperatorId, OperatorOutput, SourceConcept, Usage } from '@agharta/shared';
+import type { OperatorId, OperatorOutput, SourceConcept, Usage } from '@agharta/shared';
 import { OperatorOutputSchema, EMPTY_USAGE, addUsage, lexicalSimilarity, mulberry32 } from '@agharta/shared';
 import { z } from 'zod';
 import type { ModelAdapter } from './models';

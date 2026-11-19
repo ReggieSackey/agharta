@@ -12,7 +12,6 @@
  */
 import type { OperatorId, Usage } from '@agharta/shared';
 import { mulberry32, fnv1a } from '@agharta/shared';
-import { z } from 'zod';
 
 /** A structured generation request the engine issues to a model. */
 export interface GenerateRequest {
@@ -99,7 +98,6 @@ function synthesizeUsage(req: GenerateRequest, calls: number): Usage {
 function synthesize(req: GenerateRequest, rng: () => number): unknown {
   const seedText = req.system + '|' + req.prompt;
   const variant = fnv1a(req.requestId);
-  const pick = <T>(arr: T[]): T => arr[variant % arr.length]!;
   const num = (lo: number, hi: number) => lo + Math.floor(rng() * (hi - lo + 1));
   if (req.operator === 'judge') {
     return {

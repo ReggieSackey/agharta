@@ -14,9 +14,9 @@ import {
 import type { OperatorStatsMap, ArmResult } from '../src';
 import type { SearchStrategy } from '@agharta/shared';
 
-function statsWith(over: Partial<Record<'divergent' | 'analogy', { qualified: number; unique: number }>>): OperatorStatsMap {
+function statsWith(over: Partial<Record<'divergent' | 'analogy' | 'inversion' | 'recombination', { qualified: number; unique: number }>>): OperatorStatsMap {
   const s = emptyStatsMap();
-  for (const [op, v] of Object.entries(over) as Array<[keyof typeof over, { qualified: number; unique: number }]>) {
+  for (const [op, v] of Object.entries(over) as Array<[keyof OperatorStatsMap, { qualified: number; unique: number }]>) {
     s[op as keyof OperatorStatsMap] = {
       ...emptyCounters(),
       provisionallyQualified: v.qualified,

@@ -16,13 +16,25 @@
     "test": "pnpm -r test",
     "test:e2e": "pnpm --filter @agharta/web test:e2e",
     "test:convex": "npx tsx scripts/convex-integration.ts",
+    "test:convex:mcp": "npx tsx scripts/mcp-live.ts",
+    "test:convex:challenger": "npx tsx scripts/challenger-live.ts",
     "benchmark": "npx tsx benchmarks/runner.ts",
     "format": "prettier --write ."
   },
+  "dependencies": {
+    "@agharta/benchmarks": "workspace:*",
+    "@agharta/core": "workspace:*",
+    "@agharta/evaluation": "workspace:*",
+    "@agharta/learning": "workspace:*",
+    "@agharta/shared": "workspace:*"
+  },
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "convex": "^1.51.0",
     "prettier": "^3.4.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "eslint": "^9.0.0",
+    "typescript-eslint": "^8.0.0"
   }
 }

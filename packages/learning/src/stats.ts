@@ -54,7 +54,6 @@ export function smoothQualification(c: OperatorCounters): SmoothedEstimate {
   const alpha = PRIOR_ALPHA + c.provisionallyQualified;
   const beta = PRIOR_BETA + Math.max(0, c.unique - c.provisionallyQualified);
   const mean = alpha / (alpha + beta);
-  const n = alpha + beta - PRIOR_ALPHA - PRIOR_BETA; // effective sample
   const z = 1.96;
   const p = c.provisionallyQualified;
   const nn = c.unique;
@@ -83,7 +82,6 @@ export function wilsonHalfWidth(successes: number, n: number, z = 1.96): number 
   if (n === 0) return 0.5;
   const p = successes / n;
   const denom = 1 + (z * z) / n;
-  const centre = p + (z * z) / (2 * n);
   const margin = z * Math.sqrt((p * (1 - p) + (z * z) / (4 * n)) / n);
   return margin / denom;
 }

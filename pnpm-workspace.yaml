@@ -2,3 +2,10 @@ packages:
   - apps/*
   - packages/*
   - benchmarks
+allowBuilds:
+  convex: true
+  esbuild: true
+onlyBuiltDependencies:
+  - esbuild
+  - convex
+  - better-sqlite3

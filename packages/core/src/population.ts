@@ -6,8 +6,8 @@
  *   maximize qualityProxy + diversityWeight * minDistanceToSelected
  * while reserving >=1 slot for the most original viable-but-lower-scored idea.
  */
-import type { Evaluation, Idea, OperatorId } from '@agharta/shared';
-import { hashEmbedding, cosineSimilarity, lexicalSimilarity, makeId } from '@agharta/shared';
+import type { Evaluation, Idea } from '@agharta/shared';
+import { hashEmbedding, cosineSimilarity, lexicalSimilarity } from '@agharta/shared';
 
 export interface Candidate {
   idea: Idea;

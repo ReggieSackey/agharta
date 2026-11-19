@@ -30,7 +30,7 @@ export function defaultChampion(id: string): SearchStrategy {
 export function allocateOpportunities(
   weights: Record<OperatorId, number>,
   totalSlots: number,
-  explorationFloor: number
+  _explorationFloor: number
 ): Record<OperatorId, number> {
   // reserve floor share for underexplored operators (handled by learning layer)
   const out = { divergent: 0, analogy: 0, inversion: 0, recombination: 0 } as Record<OperatorId, number>;

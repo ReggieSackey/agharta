@@ -1,0 +1,29 @@
+{
+  "name": "@agharta/benchmarks",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./problems/index.ts",
+  "types": "./problems/index.ts",
+  "exports": {
+    ".": "./problems/index.ts",
+    "./problems": "./problems/index.ts",
+    "./runner": "./runner.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "pnpm -w exec eslint benchmarks"
+  },
+  "dependencies": {
+    "@agharta/shared": "workspace:*",
+    "@agharta/core": "workspace:*",
+    "@agharta/evaluation": "workspace:*",
+    "zod": "^4.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vitest": "^5.1.0",
+    "tsx": "^4.19.0"
+  }
+}

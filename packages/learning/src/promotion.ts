@@ -2,7 +2,7 @@
  * Promotion: apply an eligible experiment with explicit user confirmation.
  * A rejected strategy can NEVER become active. All transitions are logged.
  */
-import type { OperatorId, SearchStrategy } from '@agharta/shared';
+import type { SearchStrategy } from '@agharta/shared';
 
 export interface PromotionAuditEntry {
   experimentId: string;

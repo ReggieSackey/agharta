@@ -4,7 +4,7 @@
  * system preamble) and, when budget allows, a different model family.
  */
 import type { Evaluation, Idea, Usage } from '@agharta/shared';
-import { EMPTY_USAGE, addUsage, lexicalSimilarity, hashEmbedding, cosineSimilarity } from '@agharta/shared';
+import { lexicalSimilarity, hashEmbedding, cosineSimilarity } from '@agharta/shared';
 import { z } from 'zod';
 import type { ModelAdapter } from '@agharta/core';
 import { rubricPrompt, JUDGE_VERSION } from './rubrics';

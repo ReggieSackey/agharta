@@ -22,6 +22,7 @@ export {
   buildChallenger,
   evaluateGate,
   DEFAULT_PROMOTION_GATE,
+  fallbackProposal,
 } from './challenger';
 export type { OptimizerOutput, ArmResult, ExperimentRecord, PromotionGate, GateEvaluation } from './challenger';
 export { promoteStrategy } from './promotion';
