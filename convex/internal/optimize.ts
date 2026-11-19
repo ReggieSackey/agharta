@@ -29,11 +29,18 @@ export const runExperiment = internalAction({
       challenger: { config: SearchStrategy };
     };
 
-    const { adapterFromEnv } = await import('@agharta/core/models.openai');
-    const creative = adapterFromEnv({
+    const { adaptersFromEnv } = await import('@agharta/core/models.providers');
+    const { creative } = await adaptersFromEnv({
       AI_PROVIDER: process.env.AI_PROVIDER,
+      CREATIVE_PROVIDER: process.env.CREATIVE_PROVIDER,
+      JUDGE_PROVIDER: process.env.JUDGE_PROVIDER,
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+      ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+      DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY,
+      GLM_API_KEY: process.env.GLM_API_KEY,
       CREATIVE_MODEL_ID: process.env.CREATIVE_MODEL_ID,
+      JUDGE_MODEL_ID: process.env.JUDGE_MODEL_ID,
+      MODEL_BASE_URL: process.env.MODEL_BASE_URL,
     });
     const judge = new ModelJudge(creative);
 

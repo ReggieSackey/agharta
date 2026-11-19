@@ -76,6 +76,21 @@ Every statement below was executed against the live dev deployment during this b
 3. **Challenger gate — promotion path** (same script, later run): an analogy-weighted challenger improved the primary metric 13.0% over 4 validation problems × 3 seeds (labeled zero-cost fallback basis), promoted with an audit entry (`v0.1 → v0.2-challenger`), and a subsequent exploration ran under the promoted strategy.
 4. **MCP from a real client** (`pnpm test:convex:mcp`): a real stdio MCP server + client handshake listed all 4 tools, ran an exploration to completion (8 ideas with operator provenance and proxy-score labels), submitted feedback, and the bridge refused both forged and revoked tokens (401).
 
+## Model-agnostic providers
+
+The engine talks to a single `ModelAdapter` interface; the provider behind it is env-config and can be switched per deployment or per role:
+
+| `AI_PROVIDER` | Package | Notes |
+| --- | --- | --- |
+| `openai` | `@ai-sdk/openai` | default model `gpt-5.2` |
+| `anthropic` | `@ai-sdk/anthropic` | e.g. `claude-sonnet-4-5` |
+| `deepseek` | `@ai-sdk/deepseek` | e.g. `deepseek-chat` |
+| `glm` (aliases `zai`/`zhipu`) | `@ai-sdk/zai` | e.g. `glm-4.6` |
+| `openai-compatible` | `@ai-sdk/openai-compatible` | any OpenAI-style API via `MODEL_BASE_URL` (Ollama, vLLM, Groq, OpenRouter…) |
+| `fake` | built-in | deterministic, free, default |
+
+Split generator and judge across providers with `CREATIVE_PROVIDER` / `JUDGE_PROVIDER` (+ per-role `*_MODEL_ID`, `*_API_KEY`, `*_BASE_URL`, `*_COST_*`). All set via `npx convex env set` — verified live: a misconfigured provider fails the exploration with a clear error (never a stuck run), and switching back recovers immediately. See `.env.example` for the full matrix.
+
 ## MCP usage
 
 ```bash

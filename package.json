@@ -18,6 +18,7 @@
     "test:convex": "npx tsx scripts/convex-integration.ts",
     "test:convex:mcp": "npx tsx scripts/mcp-live.ts",
     "test:convex:challenger": "npx tsx scripts/challenger-live.ts",
+    "test:convex:provider": "npx tsx scripts/provider-switch.ts",
     "benchmark": "npx tsx benchmarks/runner.ts",
     "format": "prettier --write ."
   },
@@ -26,7 +27,13 @@
     "@agharta/core": "workspace:*",
     "@agharta/evaluation": "workspace:*",
     "@agharta/learning": "workspace:*",
-    "@agharta/shared": "workspace:*"
+    "@agharta/shared": "workspace:*",
+    "ai": "^7.0.177",
+    "@ai-sdk/openai": "^4.0.121",
+    "@ai-sdk/anthropic": "^4.0.106",
+    "@ai-sdk/deepseek": "^3.0.88",
+    "@ai-sdk/zai": "^3.0.56",
+    "@ai-sdk/openai-compatible": "^3.0.93"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

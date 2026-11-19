@@ -48,19 +48,27 @@ export const runExplorationAction = internalAction({
       previouslyTried: problem.previousAttempts ?? [],
     };
 
-    // model adapters: fake (deterministic) unless OPENAI_API_KEY is configured
-    const { adapterFromEnv } = await import('@agharta/core/models.openai');
-    const creative = adapterFromEnv({
+    // model adapters: fake (deterministic) unless a real provider is configured;
+    // provider-agnostic — openai / anthropic / deepseek / glm / openai-compatible
+    const { adaptersFromEnv } = await import('@agharta/core/models.providers');
+    const env = {
       AI_PROVIDER: process.env.AI_PROVIDER,
+      CREATIVE_PROVIDER: process.env.CREATIVE_PROVIDER,
+      JUDGE_PROVIDER: process.env.JUDGE_PROVIDER,
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+      ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+      DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY,
+      GLM_API_KEY: process.env.GLM_API_KEY ?? process.env.ZHIPU_API_KEY ?? process.env.ZAI_API_KEY,
+      CREATIVE_API_KEY: process.env.CREATIVE_API_KEY,
+      JUDGE_API_KEY: process.env.JUDGE_API_KEY,
       CREATIVE_MODEL_ID: process.env.CREATIVE_MODEL_ID,
-    });
-    const judge = new ModelJudge(adapterFromEnv({
-      AI_PROVIDER: process.env.AI_PROVIDER,
-      OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-      CREATIVE_MODEL_ID: process.env.JUDGE_MODEL_ID,
-    }));
-
+      JUDGE_MODEL_ID: process.env.JUDGE_MODEL_ID,
+      MODEL_BASE_URL: process.env.MODEL_BASE_URL,
+      CREATIVE_BASE_URL: process.env.CREATIVE_BASE_URL,
+      JUDGE_BASE_URL: process.env.JUDGE_BASE_URL,
+      MODEL_COST_INPUT: process.env.MODEL_COST_INPUT,
+      MODEL_COST_OUTPUT: process.env.MODEL_COST_OUTPUT,
+    };
     const runtime: EngineRuntime = {
       persistIdea: async (idea, evaluation) =>
         ctx.runMutation(internal.internal.persist.persistIdeaInternal, {
@@ -120,6 +128,33 @@ export const runExplorationAction = internalAction({
         return state === 'cancelled';
       },
     };
+
+    // Build adapters INSIDE the guarded section so misconfiguration (unknown
+    // provider, missing API key, missing baseURL) finalizes the exploration as
+    // `failed` with a clear error instead of throwing out of the action and
+    // leaving the record stuck in `queued` forever.
+    let creative: Awaited<ReturnType<typeof adaptersFromEnv>>['creative'];
+    let judge: ModelJudge;
+    try {
+      const { creative: c, judge: j } = await adaptersFromEnv(env);
+      creative = c;
+      judge = new ModelJudge(j);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      await ctx.runMutation(internal.internal.persist.appendErrorInternal, {
+        explorationId: args.explorationId,
+        message: `provider configuration error: ${message}`,
+      });
+      await ctx.runMutation(internal.internal.persist.finalizeExplorationInternal, {
+        explorationId: args.explorationId,
+        status: 'failed',
+        usage: null,
+        summary: null,
+        recommendations: [],
+        mechanisms: [],
+      });
+      throw err;
+    }
 
     try {
       const cfg: EngineConfig = {

@@ -67,16 +67,28 @@ Resumed the uncommitted build. Verified every prior claim, fixed what was actual
 
 **Docs updated:** README (learning-loop demo section with the four executed demonstrations, new scripts), EVALUATION (14-problem report + all live evidence), this file.
 
-## Verification snapshot (end of session 3)
+## 2026-11-19 (session 4 — model-agnostic providers)
+
+User requirement: switchable models across DeepSeek, GLM, OpenAI, Anthropic, etc.
+
+- **`packages/core/src/models.providers.ts`** (new): one provider-agnostic factory over official AI SDK packages — `openai` (`@ai-sdk/openai`), `anthropic` (`@ai-sdk/anthropic`), `deepseek` (`@ai-sdk/deepseek`), `glm` (`@ai-sdk/zai`; aliases `zai`/`zhipu`/`chatglm`), `openai-compatible` (`@ai-sdk/openai-compatible` for Ollama/vLLM/Groq/OpenRouter via `MODEL_BASE_URL`), and `fake`. Generator/judge split (`CREATIVE_PROVIDER`/`JUDGE_PROVIDER` + per-role model ids, keys, baseURLs, cost overrides) so the judge can be a different model family than the generator. Estimated per-provider cost tables (overridable; unknown → $0 + token/wall-clock caps). Switching is env-only — no code changes, engine untouched (it only ever saw the `ModelAdapter` interface).
+- 12 new unit tests (aliases, unknown-provider error, key requirements, baseURL requirement, role split, fake fallback). Core now 34 tests; suite 95.
+- Convex call sites (`internal/search.ts`, `internal/optimize.ts`) rewired to `adaptersFromEnv`; `.env.example` documents the full matrix.
+- **Bug found + fixed by the live switch test:** provider construction sat outside the action's error handling, so a misconfigured provider left explorations stuck `queued` forever. Moved inside a guarded section → `status=failed` with `provider configuration error: …` guidance.
+- **Live evidence (`scripts/provider-switch.ts`):** set `AI_PROVIDER=glm` with no key → exploration fails closed with the exact expected message; switch back to `fake` → completes. Full regression after: `test:convex` 13/13, `test:convex:mcp` 9/9, `test:convex:challenger` 9/9.
+- Real-model calls (deepseek/glm/openai/anthropic) remain **unexecuted** — no credentials in this environment. The switch plumbing is verified; actual generation quality with each provider is a `npx convex env set` away once a key exists.
+
+## Verification snapshot (end of session 4)
 
 | Check | Result |
 | --- | --- |
 | `pnpm typecheck` | ✅ all workspaces |
-| `pnpm test` | ✅ 83 tests |
+| `pnpm test` | ✅ 95 tests |
 | `pnpm lint` | ✅ 0 errors, 0 warnings |
 | `pnpm test:convex` | ✅ 13/13 live |
 | `pnpm test:convex:mcp` | ✅ 9/9 live |
 | `pnpm test:convex:challenger` | ✅ 9/9 live (both gate paths) |
+| `pnpm test:convex:provider` | ✅ live switch: glm-without-key fails closed; fake recovers |
 | `pnpm test:e2e` | ✅ 3 passed, 1 skipped (no WorkOS creds) |
 | `pnpm build` | ✅ web + packages |
 | `pnpm benchmark` | ✅ executed (fake model), report in docs/EVALUATION.md |

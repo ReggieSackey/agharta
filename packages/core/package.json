@@ -9,6 +9,7 @@
     ".": "./src/index.ts",
     "./models": "./src/models.ts",
     "./models.openai": "./src/models.openai.ts",
+    "./models.providers": "./src/models.providers.ts",
     "./operators": "./src/operators.ts",
     "./concepts": "./src/concepts.ts",
     "./population": "./src/population.ts",
@@ -28,13 +29,29 @@
   "optionalDependencies": {},
   "peerDependencies": {
     "ai": ">=7",
-    "@ai-sdk/openai": ">=4"
+    "@ai-sdk/openai": ">=4",
+    "@ai-sdk/anthropic": ">=4",
+    "@ai-sdk/deepseek": ">=3",
+    "@ai-sdk/zai": ">=3",
+    "@ai-sdk/openai-compatible": ">=3"
   },
   "peerDependenciesMeta": {
     "ai": {
       "optional": true
     },
     "@ai-sdk/openai": {
+      "optional": true
+    },
+    "@ai-sdk/anthropic": {
+      "optional": true
+    },
+    "@ai-sdk/deepseek": {
+      "optional": true
+    },
+    "@ai-sdk/zai": {
+      "optional": true
+    },
+    "@ai-sdk/openai-compatible": {
       "optional": true
     }
   },
