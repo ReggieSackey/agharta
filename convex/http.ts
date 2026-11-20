@@ -76,6 +76,11 @@ function mcpDashboardUrl(explorationId: string): string {
 async function authenticate(ctx: ActionCtx, request: Request): Promise<TokenAuth | null> {
   const auth = request.headers.get('authorization') ?? '';
   const token = auth.startsWith('Bearer ') ? auth.slice(7).trim() : '';
+  return authenticateToken(ctx, request, token);
+}
+
+/** Auth pipeline shared by the header and token-in-URL routes. */
+async function authenticateToken(ctx: ActionCtx, request: Request, token: string): Promise<TokenAuth | null> {
   if (!token.startsWith('agt_')) {
     return null;
   }
@@ -276,6 +281,29 @@ http.route({
     if (limited) return limited;
     const auth = await authenticate(ctx, request);
     if (!auth) return jsonRpcError(null, -32001, 'unauthorized: valid agt_ token required');
+    return handleMcpJsonRpc(ctx, request, auth);
+  }),
+});
+
+// ChatGPT-friendly variant: token embedded in the URL path.
+// ChatGPT's custom-connector UI cannot send an Authorization header (only
+// OAuth or "No authentication"), so this route accepts the personal token
+// as /mcp/k/<token>. Same auth pipeline (lockout, audit, workspace binding);
+// the URL is the credential — treat it like the token itself.
+http.route({
+  pathPrefix: '/mcp/k/',
+  method: 'POST',
+  handler: httpAction(async (ctx, request) => {
+    const limited = await rateLimit(ctx, request);
+    if (limited) return limited;
+    const token = decodeURIComponent(new URL(request.url).pathname.slice('/mcp/k/'.length).replace(/\/+$/, ''));
+    const auth = await authenticateToken(ctx, request, token);
+    if (!auth) return jsonRpcError(null, -32001, 'unauthorized: valid agt_ token required');
+    return handleMcpJsonRpc(ctx, request, auth);
+  }),
+});
+
+async function handleMcpJsonRpc(ctx: ActionCtx, request: Request, auth: TokenAuth): Promise<Response> {
     const msg = (await request.json().catch(() => null)) as {
       jsonrpc?: string;
       id?: unknown;
@@ -356,8 +384,7 @@ http.route({
       return jsonRpcError(id, -32601, `unknown tool: ${name}`);
     }
     return jsonRpcError(id, -32601, `method not found: ${method}`);
-  }),
-});
+}
 
 // Lightweight discovery manifest for ChatGPT app registration
 // (OpenAI developer dashboard consumes this shape when configuring an MCP app)
