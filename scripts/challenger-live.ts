@@ -22,7 +22,7 @@ import { ConvexHttpClient } from 'convex/browser';
 import { anyApi } from 'convex/server';
 import type { UserIdentityAttributes } from 'convex/server';
 
-const api = anyApi;
+const api = anyApi as any;
 
 // Your Convex team/project slugs (dashboard URL shows them):
 //   https://dashboard.convex.dev/<teamSlug>/<projectSlug>
@@ -61,6 +61,7 @@ async function main() {
     issuer: 'https://auth.workos.com',
     name: 'Challenger Live Test',
   };
+  // @ts-expect-error runtime method exists; typing lags in convex 1.51
   user.setAdminAuth(adminKey, identity);
 
   const results: string[] = [];
@@ -105,7 +106,7 @@ async function main() {
     weightChange: { operator: 'analogy', newWeight: 0.5 },
   };
   const challenge = await user.mutation(api.strategies.challenge, {
-    baseStrategyId: champion._id,
+    baseStrategyId: champion!._id,
     changeProposal: JSON.stringify(proposal),
   });
   check('strategies.challenge returns experiment', !!challenge?.experimentId);
@@ -158,7 +159,7 @@ async function main() {
     const stillChampion = ((await user.query(api.strategies.listByWorkspace, { workspaceId })) as Array<any>).find(
       (s: any) => s.state === 'champion'
     );
-    check('champion unchanged after rejection', stillChampion?._id === champion._id);
+    check('champion unchanged after rejection', stillChampion?._id === champion!._id);
   }
 
   // 4b. eligible → promote, audit entry, subsequent exploration uses it

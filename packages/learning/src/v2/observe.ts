@@ -25,7 +25,7 @@ export function extractObservation(record: ExperimentRecord): ExperimentObservat
     const cands = candidatesByHypothesis.get(h.id) ?? [];
     const scored = cands
       .map((c) => ({ c, a: assessmentByCandidate.get(c.id) }))
-      .filter((x) => x.a !== undefined);
+      .filter((x): x is { c: (typeof cands)[number]; a: NonNullable<typeof x.a> } => x.a !== undefined);
 
     // novel + coherent: composite novelty >= 3.0 AND coherence/relevance gates passed
     const novelCoherent = scored.filter(

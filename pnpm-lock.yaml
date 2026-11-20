@@ -209,6 +209,9 @@ importers:
         specifier: ^7.0.177
         version: 7.0.177(zod@4.6.7)
     devDependencies:
+      '@modelcontextprotocol/client':
+        specifier: ^2.4.0
+        version: 2.4.0
       '@types/node':
         specifier: ^24.0.0
         version: 24.19.2
@@ -347,6 +350,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@agharta/learning':
+        specifier: workspace:*
+        version: link:../learning
       '@agharta/shared':
         specifier: workspace:*
         version: link:../shared
@@ -400,12 +406,6 @@ importers:
 
   packages/learning:
     dependencies:
-      '@agharta/core':
-        specifier: workspace:*
-        version: link:../core
-      '@agharta/evaluation':
-        specifier: workspace:*
-        version: link:../evaluation
       '@agharta/shared':
         specifier: workspace:*
         version: link:../shared

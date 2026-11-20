@@ -12,8 +12,8 @@
 import { describe, it, expect } from 'vitest';
 import { runExperiment } from '@agharta/core';
 import { createFakeModel } from '@agharta/core/models';
-import { initialConceptualMap, initialSearchPolicy, learn, selectHypotheses } from '../index';
-import { extractObservation } from './observe';
+import { initialConceptualMap, initialSearchPolicy, learn, selectHypotheses } from '@agharta/learning';
+import { extractObservation } from '@agharta/learning';
 import type { ExperimentObservation } from '@agharta/shared';
 import { SEED_MECHANISMS } from '@agharta/shared';
 

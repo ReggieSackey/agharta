@@ -6,7 +6,7 @@
  */
 import type { OperatorId, SearchStrategy } from '@agharta/shared';
 import { z } from 'zod';
-import type { ExplorationMetrics } from '@agharta/evaluation';
+import type { ExplorationMetrics } from '@agharta/shared';
 
 // ---------------------------------------------------------------------------
 // Optimizer: propose one structured change to the champion

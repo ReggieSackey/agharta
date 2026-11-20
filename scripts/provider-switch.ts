@@ -16,7 +16,7 @@ import { ConvexHttpClient } from 'convex/browser';
 import { anyApi } from 'convex/server';
 import type { UserIdentityAttributes } from 'convex/server';
 
-const api = anyApi;
+const api = anyApi as any;
 const phase = process.argv[2] ?? 'expect-fail';
 
 async function creds() {
@@ -29,7 +29,11 @@ async function creds() {
     headers: { 'content-type': 'application/json', authorization: `Bearer ${accessToken}` },
     body: JSON.stringify({
       selectedDeploymentName: deploymentName,
-      projectSelection: { kind: 'teamAndProjectSlugs', teamSlug: TEAM_SLUG, projectSlug: PROJECT_SLUG },
+      projectSelection: {
+        kind: 'teamAndProjectSlugs',
+        teamSlug: process.env.CONVEX_TEAM_SLUG!,
+        projectSlug: process.env.CONVEX_PROJECT_SLUG!,
+      },
     }),
   });
   if (!res.ok) throw new Error(`authorize failed ${res.status}`);
@@ -45,6 +49,7 @@ async function main() {
     issuer: 'https://auth.workos.com',
     name: 'Provider Switch Test',
   };
+  // @ts-expect-error runtime method exists; typing lags in convex 1.51
   user.setAdminAuth(adminKey, identity);
 
   const me = await user.mutation(api.users.getOrCreateMe, {

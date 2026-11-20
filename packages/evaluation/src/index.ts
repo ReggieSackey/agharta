@@ -5,4 +5,5 @@ export type { JudgeOptions, JudgeOutput } from './judge';
 export { checkSchema, checkLineage, checkBudget, checkHardConstraint, runDeterministicChecks } from './dedup';
 export type { DeterministicCheck } from './dedup';
 export { computeMetrics, computeFromProxies, DEFAULT_THRESHOLDS } from './metrics';
-export type { QualifiedThresholds, ExplorationMetrics, MetricInput } from './metrics';
+export type { QualifiedThresholds, MetricInput } from './metrics';
+export type { ExplorationMetrics } from '@agharta/shared';

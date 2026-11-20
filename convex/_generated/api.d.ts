@@ -9,16 +9,20 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as experiments from "../experiments.js";
 import type * as explorations from "../explorations.js";
 import type * as feedback from "../feedback.js";
 import type * as http from "../http.js";
 import type * as ideas from "../ideas.js";
+import type * as internal_crypto from "../internal/crypto.js";
 import type * as internal_learning from "../internal/learning.js";
 import type * as internal_mcp from "../internal/mcp.js";
 import type * as internal_optimize from "../internal/optimize.js";
 import type * as internal_optimizePersist from "../internal/optimizePersist.js";
 import type * as internal_persist from "../internal/persist.js";
 import type * as internal_search from "../internal/search.js";
+import type * as internal_v2 from "../internal/v2.js";
+import type * as internal_v2store from "../internal/v2store.js";
 import type * as learning from "../learning.js";
 import type * as mcpTokens from "../mcpTokens.js";
 import type * as mechanisms from "../mechanisms.js";
@@ -34,16 +38,20 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  experiments: typeof experiments;
   explorations: typeof explorations;
   feedback: typeof feedback;
   http: typeof http;
   ideas: typeof ideas;
+  "internal/crypto": typeof internal_crypto;
   "internal/learning": typeof internal_learning;
   "internal/mcp": typeof internal_mcp;
   "internal/optimize": typeof internal_optimize;
   "internal/optimizePersist": typeof internal_optimizePersist;
   "internal/persist": typeof internal_persist;
   "internal/search": typeof internal_search;
+  "internal/v2": typeof internal_v2;
+  "internal/v2store": typeof internal_v2store;
   learning: typeof learning;
   mcpTokens: typeof mcpTokens;
   mechanisms: typeof mechanisms;

@@ -32,5 +32,6 @@ export type { PromotionOutcome, PromotionAuditEntry } from './promotion';
 export * from './v2/compat';
 export * from './v2/selection';
 export * from './v2/learn';
+export { extractObservation } from './v2/observe';
 export * from './v2/initial';
 export * from './v2/gate';

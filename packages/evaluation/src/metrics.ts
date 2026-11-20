@@ -19,20 +19,7 @@ export interface MetricInput {
   usage: Usage;
 }
 
-export interface ExplorationMetrics {
-  generatedIdeas: number;
-  validIdeas: number;
-  uniqueMechanisms: number;
-  qualifiedUniqueIdeas: number;
-  qualifiedPerDollar: number;
-  duplicateRate: number;
-  topKDiversity: number;
-  meanNovelty: number;
-  bestNovelty: number;
-  meanFeasibility: number;
-  latencyMs: number;
-  costUsd: number;
-}
+import type { ExplorationMetrics } from '@agharta/shared';
 
 export function computeMetrics(input: MetricInput, thresholds: QualifiedThresholds = DEFAULT_THRESHOLDS): ExplorationMetrics {
   const { ideas, evaluations, usage } = input;

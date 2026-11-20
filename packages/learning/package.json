@@ -20,12 +20,10 @@
   },
   "dependencies": {
     "@agharta/shared": "workspace:*",
-    "@agharta/evaluation": "workspace:*",
     "zod": "^4.6.0"
   },
   "devDependencies": {
     "typescript": "^5.7.0",
-    "vitest": "^5.1.0",
-    "@agharta/core": "workspace:*"
+    "vitest": "^5.1.0"
   }
 }

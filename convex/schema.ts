@@ -263,6 +263,117 @@ export default defineSchema({
     .index('by_prefix', ['tokenPrefix'])
     .index('by_workspace', ['workspaceId']),
 
+
+  // =========================================================================
+  // V2 — experimental creative search + asynchronous learning
+  // =========================================================================
+
+  /** full experiment records (Engine 1 output, Engine 2 input) */
+  experiments: defineTable({
+    workspaceId: v.id('workspaces'),
+    problemId: v.id('problems'),
+    problemText: v.string(),
+    /** ExperimentRecord JSON minus ids (validated at write boundary) */
+    record: v.any(),
+    status: v.string(),
+    /** artifacts snapshot ids used for this run */
+    mapVersionId: v.string(),
+    policyVersionId: v.string(),
+    /** engine-2 checkpoint: has a learning run consumed this experiment? */
+    processedByLearning: v.optional(v.boolean()),
+    startedAt: v.number(),
+    finishedAt: v.optional(v.number()),
+  })
+    .index('by_workspace', ['workspaceId'])
+    .index('by_workspace_status', ['workspaceId', 'status'])
+    .index('by_workspace_unprocessed', ['workspaceId', 'processedByLearning', 'status']),
+
+  /** immutable versioned conceptual maps (private per workspace) */
+  conceptualMapVersions: defineTable({
+    workspaceId: v.id('workspaces'),
+    versionId: v.string(),
+    version: v.string(),
+    artifact: v.any(), // ConceptualMap JSON
+    isActive: v.optional(v.boolean()),
+    createdAt: v.number(),
+  })
+    .index('by_workspace_active', ['workspaceId', 'isActive'])
+    .index('by_workspace_version', ['workspaceId', 'versionId']),
+
+  /** immutable versioned search policies (private per workspace) */
+  policyVersions: defineTable({
+    workspaceId: v.id('workspaces'),
+    versionId: v.string(),
+    version: stringValidator(),
+    artifact: v.any(), // SearchPolicy JSON
+    isActive: v.optional(v.boolean()),
+    createdAt: v.number(),
+  })
+    .index('by_workspace_active', ['workspaceId', 'isActive'])
+    .index('by_workspace_version', ['workspaceId', 'versionId']),
+
+  /** engine-2 learning runs (audit trail) */
+  learningRuns: defineTable({
+    workspaceId: v.id('workspaces'),
+    status: v.union(
+      v.literal('pending'),
+      v.literal('fitting'),
+      v.literal('evaluating'),
+      v.literal('promoted'),
+      v.literal('retained'),
+      v.literal('failed')
+    ),
+    /** observation experiment ids consumed */
+    experimentIds: v.array(v.string()),
+    candidateMapVersionId: v.optional(v.string()),
+    candidatePolicyVersionId: v.optional(v.string()),
+    championMapVersionId: v.optional(v.string()),
+    championPolicyVersionId: v.optional(v.string()),
+    evaluation: v.optional(v.any()), // ArtifactEvaluation JSON
+    notes: v.optional(v.array(v.string())),
+    error: v.optional(v.string()),
+    /** idempotency: hash of consumed experiment ids */
+    inputHash: v.string(),
+    createdAt: v.number(),
+    finishedAt: v.optional(v.number()),
+  })
+.index('by_workspace_status', ['workspaceId', 'status'])
+    .index('by_workspace_created', ['workspaceId', 'createdAt'])
+    .index('by_input_hash', ['inputHash']),
+
+  /** champion/challenger bench evaluations */
+  artifactEvaluations: defineTable({
+    workspaceId: v.id('workspaces'),
+    learningRunId: v.id('learningRuns'),
+    evaluation: v.any(), // ArtifactEvaluation JSON
+    seeds: v.array(v.number()),
+    problemIds: v.array(v.string()),
+    passed: v.boolean(),
+    createdAt: v.number(),
+  }).index('by_learning_run', ['learningRunId']),
+
+  /** engine-2 scheduled heartbeat bookkeeping (idempotency) */
+  learningHeartbeats: defineTable({
+    workspaceId: v.id('workspaces'),
+    kind: v.string(),
+    lastRunAt: v.number(),
+  }).index('by_workspace_kind', ['workspaceId', 'kind']),
+
+  /** BYOK provider credentials — AES-256-GCM ciphertext ONLY */
+  providerCredentials: defineTable({
+    workspaceId: v.id('workspaces'),
+    provider: v.string(),
+    /** base64 ciphertext bundle {iv, tag, ct} — plaintext never stored */
+    encrypted: v.string(),
+    /** key fingerprint (non-secret) for key rotation awareness */
+    keyFingerprint: v.string(),
+    /** display-safe metadata only */
+    label: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_workspace', ['workspaceId'])
+    .index('by_workspace_provider', ['workspaceId', 'provider']),
   /** dev-only demo data marker (never shown as real performance) */
   demoData: defineTable({
     workspaceId: v.id('workspaces'),

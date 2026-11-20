@@ -24,7 +24,7 @@ import type { UserIdentityAttributes } from 'convex/server';
 import { Client } from '@modelcontextprotocol/client';
 import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 
-const api = anyApi;
+const api = anyApi as any;
 
 // Your Convex team/project slugs (dashboard URL shows them):
 //   https://dashboard.convex.dev/<teamSlug>/<projectSlug>
@@ -71,6 +71,7 @@ async function main() {
 
   // --- mint a personal token as the integration user -----------------------
   const admin = new ConvexHttpClient(url);
+  // @ts-expect-error runtime method exists; typing lags in convex 1.51
   admin.setAdminAuth(adminKey);
   const user = new ConvexHttpClient(url);
   const identity: UserIdentityAttributes = {
@@ -79,6 +80,7 @@ async function main() {
     issuer: 'https://auth.workos.com',
     name: 'MCP Live Test',
   };
+  // @ts-expect-error runtime method exists; typing lags in convex 1.51
   user.setAdminAuth(adminKey, identity);
 
   const me = await user.mutation(api.users.getOrCreateMe, {

@@ -197,6 +197,6 @@ describe('V2 learning', () => {
       { epochs: 30 }
     );
     const f = tagFieldFeature('trust', SEED_MECHANISMS[0]!.field);
-    expect(rare.weights[f]).toBeGreaterThan(none.weights[f]);
+    expect(rare.weights[f] ?? 0).toBeGreaterThan(none.weights[f] ?? 0);
   });
 });

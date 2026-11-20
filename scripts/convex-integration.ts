@@ -18,7 +18,7 @@ import { ConvexHttpClient } from 'convex/browser';
 import { anyApi } from 'convex/server';
 import type { UserIdentityAttributes, FunctionReference } from 'convex/server';
 
-const api = anyApi;
+const api = anyApi as any;
 
 // Your Convex team/project slugs (dashboard URL shows them):
 //   https://dashboard.convex.dev/<teamSlug>/<projectSlug>
@@ -59,6 +59,7 @@ async function main() {
   console.log(`integration target: ${deploymentName} (${url})`);
 
   const admin = new ConvexHttpClient(url);
+  // @ts-expect-error runtime method exists; typing lags in convex 1.51
   admin.setAdminAuth(adminKey);
 
   // admin-key-authenticated client acting as a fake AuthKit user identity
@@ -69,6 +70,7 @@ async function main() {
     name: 'Integration Test',
   };
   const user = new ConvexHttpClient(url);
+  // @ts-expect-error runtime method exists; typing lags in convex 1.51
   user.setAdminAuth(adminKey, identity);
 
   const results: string[] = [];
@@ -147,6 +149,7 @@ async function main() {
 
   // 8. authorization negative test: foreign identity must be rejected
   const intruder = new ConvexHttpClient(url);
+  // @ts-expect-error runtime method exists; typing lags in convex 1.51
   intruder.setAdminAuth(adminKey, {
     tokenIdentifier: 'https://auth.workos.com|intruder',
     subject: 'intruder',
