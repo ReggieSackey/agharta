@@ -4,6 +4,7 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex-api';
 import { DashboardShell } from '@/components/DashboardShell';
 import { EmptyState } from '@/components/bits';
+import { ConceptualMapGraph } from '@/components/ConceptualMapGraph';
 
 export default function V2LearningPage() {
   const active = useQuery(api.experiments.activeArtifacts, {});
@@ -14,7 +15,10 @@ export default function V2LearningPage() {
   const policy = active?.policy;
   const runs = history?.runs ?? [];
   const promotions = history?.promotions ?? [];
-  const edges = (map?.artifact?.edges ?? []) as Array<{ from: string; to: string; compatibility: number; alpha: number; beta: number; automatedEvidenceCount: number }>;
+  const mapNodes = ((map?.artifact?.nodes ?? []) as unknown as Array<{
+    id: string; kind: 'structure_tag' | 'mechanism' | 'transfer_type'; label: string;
+  }>);
+  const edges = (map?.artifact?.edges ?? []) as Array<{ from: string; to: string; compatibility: number; alpha: number; beta: number; automatedEvidenceCount: number; humanEvidenceCount: number; lastUpdatedByLearningRun?: string }>;
 
   return (
     <DashboardShell>
@@ -44,6 +48,11 @@ export default function V2LearningPage() {
           <p className="text-lg font-semibold">{runs.filter((r) => r.status === 'promoted').length} promoted · {runs.filter((r) => r.status === 'retained').length} retained</p>
           <p className="text-xs text-neutral-500 mt-1">{promotions.length} audit entries</p>
         </div>
+      </div>
+
+      <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500 mb-2">Conceptual map (interactive)</h2>
+      <div className="mb-8">
+        <ConceptualMapGraph nodes={mapNodes} edges={edges} />
       </div>
 
       <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-500 mb-2">Top learned edges (structure → mechanism)</h2>

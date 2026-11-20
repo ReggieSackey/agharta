@@ -64,7 +64,12 @@ Automated novelty estimates, human feedback, and real outcomes are separate coun
 ## Model orchestration (3 compute classes)
 
 - **Creative**: the workspace's configured generative model.
-- **Decision**: ranking/filtering uses the *learned policy* by default (free, private); optional **Jev** adapter (`packages/core/src/decisions/`) behind `JEV_API_KEY` with algorithmic fallback — a decision signal, never the policy itself. Benchmark harness compares LLM-decisions vs Jev vs learned-policy on cost/latency/novelty/coherence.
+- **Decision** (`packages/core/src/decisions/`): three interchangeable providers behind `DecisionProvider` (classifyStructure / rankHypotheses / screenCandidates):
+  - **policy decider** (default): computed directly from the learned policy snapshot — `compat()` weights ARE the ranking; zero cost, zero latency, auditable. Screen is conservative lexical relevance capped at 30% of candidates.
+  - **Jev decider** (optional, `JEV_API_KEY`): calls `POST https://api.typesafe.ai/v1/systemone` — classify = one Noul battery, rank = one request with a Score question per mechanism (parallel), screen = Noul per candidate. Cost metered at the documented $0.042/Mtok input. Rank output only *modulates* the learned prior within a [0.5, 1.5] multiplier shrunk by answer confidence — Jev reorders exploitation, never replaces the policy and never touches the exploration floor. Missing/malformed answers fall back to learned rank (no fabrication).
+  - **LLM decider** (benchmark arm): the creative model itself answers decision calls — measures what dedicating generative capacity to decisions costs.
+  - `withFallback` wraps any provider: per-call fallback to the policy decider with failure recording — the engine works without Jev even mid-run.
+  - Engine 1 records `decisionProvider`, `decisionCostUsd`, `decisionModelCalls` in every experiment's `modelInfo` — cost/quality attribution is inspectable per run.
 - **Learning**: Engine 2 fits on recorded observations (no model calls needed for the statistical core; optional LLM assist for concept extraction is behind a flag).
 
 ## BYOK credentials

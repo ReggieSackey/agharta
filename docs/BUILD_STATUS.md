@@ -104,3 +104,43 @@ User requirement: switchable models across DeepSeek, GLM, OpenAI, Anthropic, etc
 5. GitHub Actions CI (typecheck/test/build matrix).
 6. External retrieval for source concepts (SSRF-guarded); GEPA-style prompt optimization experiments.
 7. Deploy web (Vercel) + `npx convex deploy` for prod deployment.
+
+## 2026-11-19 (session 5 — V2 build: two-engine architecture)
+
+Executed the AGHARTA V2 brief end to end. All items below ran; nothing is claimed from scaffolding alone.
+
+**Stage 1 — contracts + representation** (`packages/shared/src/v2.ts`, `mechanisms.ts`): ProblemStructure / Mechanism / Hypothesis / ExperimentRecord / ConceptualMap / SearchPolicy / ArtifactEvaluation / ExperimentObservation schemas; curated 37-mechanism cross-domain library with provenance + appliesWhen. Fixed a real dependency cycle (`core → learning → evaluation → core`) by moving `ExplorationMetrics` to shared.
+
+**Stage 2 — Engine 1** (`packages/core/src/search/engine2.ts`): 7-step experimental cycle (interpret → consult → hypothesize → investigate → recombine → novelty-judge → refine) with slot-based hypothesis selection, rejected-path preservation, multi-reference novelty, full experiment records. Fake model synthesizes every step deterministically.
+
+**Stage 3 — Engine 2** (`packages/learning/src/v2/`): compat (L2 logistic over hashed joint features), selection (Thompson sampling + hard exploration floor), learn (posterior updates with IPW bias correction), observe (structured observations with evidence tiers), initial (seed artifacts). **End-to-end test proves learning changes the next experiment:** synthetic evidence shifts compat weights → selection probabilities change → different mechanisms get investigated.
+
+**Stage 4 — automatic optimization** (`convex/internal/v2.ts`, `v2store.ts`): async learning worker; champion/challenger validation bench (4 problems × 3 seeds, matched budgets); confidence-aware gate (≥8% novelty @ ≥95% posterior, coherence non-regression); atomic promotion + pair-exact rollback; idempotent processing. Fixes found by live tests: `processedByLearning` defaulted undefined (eq(false) matched nothing); promotion-audit schema rejected V2 ids.
+
+**Stage 5 — decision tier** (`packages/core/src/decisions/`): DecisionProvider interface; **policy decider** (algorithmic, computed from learned policy snapshot, zero cost); **Jev decider** (verified against current docs: POST /v1/systemone, choice/score/noul primitives, $0.042/Mtok input) — rank output only modulates the learned prior within [0.5, 1.5]; per-call fallback chain. Engine integration: classify assist + bounded pre-judging screen (≤30% drop), decision usage recorded in modelInfo. Three-arm benchmark (`benchmarks/decisions.ts`) with honest skip labeling.
+
+**Stage 6 — UX + security**: BYOK vault (AES-256-GCM, per-workspace HKDF keys, fingerprints only in UI, fail-closed missing-key path — verified live); remote MCP endpoint `/mcp` (Streamable HTTP JSON-RPC, token auth, 4 tools) + `/.well-known/mcp-manifest.json`; dashboard: `/experiments` (+ detail), `/v2learning` (runs, gates, rollback), settings BYOK panel, interactive conceptual-map graph with edge-evidence inspection.
+
+**Live verification on dev deployment `kindhearted-rook-357` (all re-run after Stage 5 deploy):**
+- `scripts/v2-loop-live.ts` — **14/14**: full loop, slot counts, active-snapshot reuse, idempotent learning, rollback.
+- `scripts/v2-mcp-live.ts` — **11/11**: remote MCP init/tools/explore/poll/feedback/summary, auth rejection, manifest.
+- `scripts/v2-byok-live.ts` — **7/7**: set/list (metadata only)/delete credential, runs with and without BYOK.
+- Unit suite — **121 pass** (31 shared + 23 learning + 52 core incl. 14 decision + 5 evaluation + 7 benchmarks + 3 mcp).
+- Decision benchmark executed (fake creative model): policy-tier decisions cost $0.000000 and 0 calls vs LLM-tier 18 calls / 12,081 tokens per 9 experiments; novelty within noise (3.497 vs 3.543 composite — screening cannot create novelty, only preserve it). **Jev arm NOT executed — no JEV_API_KEY; reported as skipped, not fabricated.**
+
+**Not executed (credentials unavailable):** real-model runs (OpenAI/Anthropic/DeepSeek/GLM), Jev live calls, hosted WorkOS login, ChatGPT connector publishing. All code paths implemented and fixture-tested; each is one env var away.
+
+## Verification snapshot (end of session 5)
+
+| Check | Result |
+| --- | --- |
+| `pnpm typecheck` | ✅ all workspaces |
+| `pnpm test` | ✅ 121 tests |
+| `pnpm build` (web) | ✅ 15 routes |
+| `v2-loop-live` | ✅ 14/14 live |
+| `v2-mcp-live` | ✅ 11/11 live |
+| `v2-byok-live` | ✅ 7/7 live |
+| Decision benchmark | ✅ executed (fake model); Jev arm honestly skipped |
+| Real-model smoke | ❌ no provider keys in env |
+| Jev live | ❌ no JEV_API_KEY |
+| ChatGPT connector publish | ❌ external review step (docs written) |
