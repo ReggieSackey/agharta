@@ -17,7 +17,10 @@
     "./strategies": "./src/strategies.ts",
     "./types": "./src/types.ts",
     "./search": "./src/search/engine2.ts",
-    "./boundary": "./src/search/boundary.ts"
+    "./boundary": "./src/search/boundary.ts",
+    "./decisions": "./src/decisions/index.ts",
+    "./decisions/jev": "./src/decisions/jevDecider.ts",
+    "./decisions/policy": "./src/decisions/policyDecider.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

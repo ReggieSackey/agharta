@@ -20,7 +20,11 @@ import {
   RecombinationOutputSchema, NoveltyJudgeOutputSchema,
 } from './boundary';
 import { selectHypotheses } from '@agharta/learning';
-import { SEED_MECHANISMS } from '@agharta/shared';
+import { SEED_MECHANISMS, SEED_STRUCTURE_TAGS } from '@agharta/shared';
+import {
+  resolveDecisionProvider, withFallback, createPolicyDecider, MAX_SCREEN_DROP_FRACTION,
+} from '../decisions';
+import type { DecisionProvider } from '../decisions';
 import { z } from 'zod';
 
 export interface ExperimentInput {
@@ -33,6 +37,10 @@ export interface ExperimentInput {
   map: ConceptualMap;        // ACTIVE snapshot at start
   policy: SearchPolicy;      // ACTIVE snapshot at start
   seed: number;
+  /** optional decision-provider override (tests/benchmarks) */
+  decisionProvider?: DecisionProvider;
+  /** env-ish decision configuration (e.g. JEV_API_KEY) */
+  decisionEnv?: Record<string, string | undefined>;
 }
 
 export interface ExperimentOutput {
@@ -80,6 +88,19 @@ export async function runExperiment(
     startedAt: Date.now(),
   };
 
+  // ---------- Decision tier resolution (Jev → policy algorithmic) ----------
+  // The decision provider is a SIGNAL SOURCE only: it screens candidates and
+  // assists classification; hypothesis-slot allocation stays with the learned
+  // policy (selectHypotheses) and the exploration floor is untouchable.
+  let decider: DecisionProvider;
+  {
+    const fallback = createPolicyDecider({ policy: input.policy, map: input.map });
+    decider = input.decisionProvider
+      ? withFallback(input.decisionProvider, fallback)
+      : resolveDecisionProvider({ policy: input.policy, map: input.map, env: input.decisionEnv ?? {} }).provider;
+  }
+  let decisionUsage: Usage = { ...EMPTY_USAGE };
+
   // ---------- Step A: interpret ----------
   let structure: ProblemStructure;
   try {
@@ -101,6 +122,30 @@ export async function runExperiment(
     return { record, finalProposals: [] };
   }
   record.problemStructure = structure;
+
+  // Decision assist: structure classification (cheap tier). The creative
+  // model's interpretation remains primary; the decider may only ADD tags it
+  // has high confidence in — never remove or rewrite.
+  try {
+    const cls = await decider.classifyStructure({
+      problemText: input.problemText,
+      objective: structure.objective,
+      knownTags: [...SEED_STRUCTURE_TAGS],
+    });
+    decisionUsage = addUsage(decisionUsage, cls.usage);
+    if (cls.structureTags.length > 0 && cls.confidence >= 0.6) {
+      const existing = new Set(structure.structureTags);
+      for (const t of cls.structureTags) {
+        if (existing.size >= 12) break;
+        if (!existing.has(t)) {
+          structure.structureTags.push(t);
+          existing.add(t);
+        }
+      }
+    }
+  } catch (err) {
+    record.errors.push(`decision classify failed (non-fatal): ${errMsg(err)}`);
+  }
 
   // ---------- Step B+C: consult policy, form hypotheses ----------
   record.status = 'hypothesizing';
@@ -256,7 +301,38 @@ export async function runExperiment(
 
   // ---------- Step E: evaluate novelty ----------
   record.status = 'evaluating';
-  const activeCandidates = record.candidates.filter((c) => c.stage !== 'discarded');
+  let activeCandidates = record.candidates.filter((c) => c.stage !== 'discarded');
+
+  // Decision tier: cheap screen BEFORE expensive per-candidate novelty
+  // judging. Bounded: at most MAX_SCREEN_DROP_FRACTION of active candidates
+  // may be dropped, so novelty (the objective) is never starved by screening.
+  if (activeCandidates.length > 4) {
+    try {
+      const screen = await decider.screenCandidates(
+        { objective: structure.objective, structureTags: structure.structureTags },
+        activeCandidates.map((c) => ({
+          candidateId: c.id, title: c.title, proposal: c.proposal,
+        }))
+      );
+      decisionUsage = addUsage(decisionUsage, screen.usage);
+      const dropLimit = Math.floor(activeCandidates.length * MAX_SCREEN_DROP_FRACTION);
+      const toDrop = screen.verdicts
+        .filter((v) => !v.keep)
+        .sort((a, b) => a.confidence - b.confidence) // drop least-confident keeps last
+        .slice(0, dropLimit);
+      for (const v of toDrop) {
+        const c = record.candidates.find((x) => x.id === v.candidateId);
+        if (c) {
+          c.stage = 'discarded';
+          c.discardReason = `decision screen (${screen.providerId}): ${v.reason}`;
+        }
+      }
+      activeCandidates = record.candidates.filter((c) => c.stage !== 'discarded');
+    } catch (err) {
+      record.errors.push(`decision screen failed (non-fatal): ${errMsg(err)}`);
+    }
+  }
+
   const siblingTitles = activeCandidates.map((c) => c.title).join(' | ');
   for (const c of activeCandidates) {
     try {
@@ -349,6 +425,15 @@ export async function runExperiment(
   record.finalProposals = finals;
   record.status = 'completed';
   record.finishedAt = Date.now();
+  // decision-tier accounting (auditable cost/latency separation)
+  record.modelInfo = {
+    ...record.modelInfo,
+    decisionProvider: decider.providerId,
+    decisionModelCalls: String(decisionUsage.modelCalls),
+    decisionCostUsd: decisionUsage.costUsd.toFixed(6),
+    decisionInputTokens: String(decisionUsage.inputTokens),
+  };
+  record.usage = addUsage(record.usage, decisionUsage);
   return { record, finalProposals: record.finalProposals };
 }
 

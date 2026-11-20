@@ -76,6 +76,13 @@ export const runV2Experiment = internalAction({
         map,
         policy,
         seed: args.seed,
+        decisionEnv: {
+          // optional Jev decision tier: server-level key only (per brief, Jev
+          // is an optional deployment-level decision signal; BYOK provider
+          // keys remain per-workspace). Absent key → policy algorithmic tier.
+          JEV_API_KEY: process.env.JEV_API_KEY,
+          JEV_MODEL: process.env.JEV_MODEL,
+        },
       });
       // validate at the persistence boundary
       const parsed = ExperimentRecordSchema.parse(record);

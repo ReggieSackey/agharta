@@ -1,0 +1,51 @@
+{
+  "benchmark": "decision-tier-comparison-v1",
+  "date": "2026-11-20T08:53:11.501Z",
+  "creativeModel": "fake-deterministic-v1 (set AI_PROVIDER for real-model runs)",
+  "problems": [
+    "bp_job_search",
+    "bp_churn",
+    "bp_open_source"
+  ],
+  "seeds": [
+    11,
+    22,
+    33
+  ],
+  "results": [
+    {
+      "arm": "llm+policy-decisions",
+      "experiments": 9,
+      "errors": 0,
+      "decisionCostUsd": 0,
+      "decisionCalls": 0,
+      "decisionLatencyMs": 0,
+      "decisionTokens": 0,
+      "meanNovelty": 3.497,
+      "meanCoherence": 0.739,
+      "totalCostUsd": 0
+    },
+    {
+      "arm": "llm-decisions",
+      "experiments": 9,
+      "errors": 0,
+      "decisionCostUsd": 0,
+      "decisionCalls": 18,
+      "decisionLatencyMs": 1,
+      "decisionTokens": 12081,
+      "meanNovelty": 3.543,
+      "meanCoherence": 0.743,
+      "totalCostUsd": 0
+    },
+    {
+      "arm": "llm+jev-decisions",
+      "skipped": true,
+      "reason": "JEV_API_KEY not set — arm not executed (no fabricated results)"
+    }
+  ],
+  "notes": [
+    "With the fake creative model, novelty differences between arms come only from screening behavior (screening can only drop candidates, never create).",
+    "Decision cost/latency/token numbers are real measured quantities from the decision providers.",
+    "Jev arm uses the documented POST /v1/systemone API (choice/score/noul, $0.042/Mtok input); without JEV_API_KEY it is reported as unexecuted."
+  ]
+}

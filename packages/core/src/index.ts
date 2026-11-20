@@ -14,3 +14,4 @@ export { defaultChampion, allocateOpportunities } from './strategies';
 export { runExperiment } from './search/engine2';
 export type { ExperimentInput, ExperimentOutput } from './search/engine2';
 export * from './search/boundary';
+export * from './decisions';
