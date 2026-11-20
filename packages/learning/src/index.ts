@@ -27,3 +27,10 @@ export {
 export type { OptimizerOutput, ArmResult, ExperimentRecord, PromotionGate, GateEvaluation } from './challenger';
 export { promoteStrategy } from './promotion';
 export type { PromotionOutcome, PromotionAuditEntry } from './promotion';
+
+// V2 learning engine
+export * from './v2/compat';
+export * from './v2/selection';
+export * from './v2/learn';
+export * from './v2/initial';
+export * from './v2/gate';

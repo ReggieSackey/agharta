@@ -9,3 +9,8 @@ export type { Candidate, SelectOutcome, SelectOptions } from './population';
 export { runExploration } from './engine';
 export type { EngineRuntime, EngineEvent, ExplorationResult, EngineConfig } from './engine';
 export { defaultChampion, allocateOpportunities } from './strategies';
+
+// V2 experimental search engine
+export { runExperiment } from './search/engine2';
+export type { ExperimentInput, ExperimentOutput } from './search/engine2';
+export * from './search/boundary';

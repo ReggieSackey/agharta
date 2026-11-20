@@ -11,13 +11,22 @@
  * call is Zod-validated at the boundary.
  */
 import type { OperatorId, Usage } from '@agharta/shared';
-import { mulberry32, fnv1a } from '@agharta/shared';
+import { mulberry32, fnv1a, SEED_STRUCTURE_TAGS, SEED_MECHANISMS, getMechanism } from '@agharta/shared';
+
+/** V2 engine step kinds (fake model synthesizes for each deterministically). */
+export type V2OperatorKind =
+  | 'interpret'
+  | 'hypothesize'
+  | 'investigate'
+  | 'recombine'
+  | 'novelty_judge'
+  | 'refine';
 
 /** A structured generation request the engine issues to a model. */
 export interface GenerateRequest {
   /** stable identifier used for seeding/caching/tests */
   requestId: string;
-  operator: OperatorId | 'judge' | 'optimizer';
+  operator: OperatorId | 'judge' | 'optimizer' | V2OperatorKind;
   system: string;
   prompt: string;
   /** JSON schema of expected structured output (informational for fakes). */
@@ -82,6 +91,34 @@ export function createFakeModel(opts: { modelId?: string } = {}): ModelAdapter &
   };
 }
 
+
+// ---------------------------------------------------------------------------
+// V2 fake-model vocab + helpers
+// ---------------------------------------------------------------------------
+const ACTORS_V2 = ['the user', 'gatekeepers', 'peers', 'competitors', 'institutions', 'algorithms'];
+const OBSTACLES_V2 = ['attention scarcity', 'coordination failure', 'information asymmetry', 'incentive misalignment', 'timing mismatch'];
+const FEATURES_V2 = ['bottleneck structure', 'feedback delay', 'redundancy need', 'signaling problem', 'allocation problem', 'search problem', 'trust deficit'];
+const INSTRUMENTS_V2 = ['protocol', 'market', 'ritual', 'artifact', 'contract', 'filter', 'schedule'];
+const ACTIONS_V2 = ['redesign the loop so feedback arrives within days', 'create a second track with different selection rules', 'make the current bottleneck visible to all parties', 'introduce a sacrificial fast-fail layer'];
+const TESTS_V2 = ['run two parallel small versions and compare outcomes', 'instrument the bottleneck and track it for a week', 'recruit five friendly users and measure the signaling effect'];
+const FIELDS_V2 = ['biology', 'economics', 'engineering', 'urban planning', 'immunology', 'aerospace'];
+
+function pickStr(arr: string[], rng: () => number): string {
+  return arr[Math.floor(rng() * arr.length)]!;
+}
+function pickN<T>(arr: T[], n: number, rng: () => number): T[] {
+  const copy = [...arr];
+  const out: T[] = [];
+  while (out.length < n && copy.length > 0) out.push(copy.splice(Math.floor(rng() * copy.length), 1)[0]!);
+  return out;
+}
+function tagsFromPrompt(p: string): string[] {
+  return [...p.matchAll(/tag[:"]+([a-z_]+)/g)].map((m) => m[1]!);
+}
+function firstLine(s: string): string {
+  return s.split('\n')[0] ?? s;
+}
+
 function synthesizeUsage(req: GenerateRequest, calls: number): Usage {
   // Synthetic but honest accounting: proportional to prompt + ~300-700 output tokens.
   const inputTokens = Math.ceil(req.prompt.length / 4) + 120;
@@ -119,6 +156,122 @@ function synthesize(req: GenerateRequest, rng: () => number): unknown {
           'Abstract the source mechanism; map each causal link to the target; propose an intervention that respects hard constraints; flag mappings that fail.',
       },
       weightChange: null,
+    };
+  }
+  // ---------------- V2 engine operators ----------------
+  if (req.operator === 'interpret') {
+    const tags = pickN([...SEED_STRUCTURE_TAGS], 2 + (variant % 3), rng);
+    return {
+      objective: `Help the user achieve: ${firstLine(req.prompt).slice(0, 300)}`,
+      structureTags: tags,
+      actors: [pickStr(ACTORS_V2, rng), pickStr(ACTORS_V2, rng)],
+      incentives: [`Fast results with minimal effort (${seedText.length % 50} chars context)`],
+      constraints: ['Limited time budget', 'Must not violate hard constraints from the brief'],
+      resources: ['Existing network', 'Small discretionary budget'],
+      obstacles: [pickStr(OBSTACLES_V2, rng)],
+      conventionalSolutions: [
+        'Do more of the standard approach with greater volume',
+        'Ask experts for advice',
+        'Copy what worked for peers',
+      ],
+      previouslyTried: ['Volume approach', 'expert advice', 'peer imitation'].slice(0, 1 + (variant % 3)),
+      uncertainties: ['Whether the user can access the needed resources'],
+      interpretationConfidence: 3 + (variant % 3),
+    };
+  }
+  if (req.operator === 'hypothesize') {
+    // parse mechanism ids from the prompt (engine lists candidate ids)
+    const ids = [...req.prompt.matchAll(/Mechanism candidate: (sc_[a-z_]+)/g)].map((m) => m[1]!);
+    const hypotheses = (ids.length > 0 ? ids : ['sc_immune']).map((mid) => {
+      const mech = getMechanism(mid) ?? SEED_MECHANISMS[0]!;
+      return {
+        mechanismId: mid,
+        transferRationale: `The ${mech.name.toLowerCase()} mechanism (${mech.mechanism}) may transfer because the problem exhibits ${pickStr(tagsFromPrompt(req.prompt), rng) || 'structural'} features it addresses.`,
+        structuralMapping: [
+          {
+            problemFeature: pickStr(FEATURES_V2, rng),
+            mechanismElement: mech.mechanism.slice(0, 200),
+            mappingConfidence: Math.round(rng() * 0.8 * 10) / 10 + 0.1,
+          },
+        ],
+        expectedProduce: `A concrete intervention applying ${mech.name.toLowerCase()} to the target problem.`,
+        invalidatingAssumptions: [
+          `The problem context satisfies "${mech.appliesWhen.slice(0, 180)}"`,
+        ],
+      };
+    });
+    return { hypotheses };
+  }
+  if (req.operator === 'investigate') {
+    const mid = /Mechanism: (sc_[a-z_]+)/.exec(req.prompt)?.[1] ?? 'sc_immune';
+    const mech = getMechanism(mid) ?? SEED_MECHANISMS[0]!;
+    const nCand = 2 + (variant % 2);
+    const candidates = [];
+    for (let i = 0; i < nCand; i++) {
+      candidates.push({
+        title: `${mech.name}-inspired ${pickStr(INSTRUMENTS_V2, rng)} ${i === 0 ? 'first pass' : 'variant'}`,
+        proposal: `Apply ${mech.mechanism.slice(0, 180)} to the problem: ${firstLine(req.prompt).slice(0, 200)}. Concretely, ${pickStr(ACTIONS_V2, rng)}.`,
+        transferStory: `${mech.name} works by ${mech.mechanism.slice(0, 160)}. Mapping: the problem's ${pickStr(FEATURES_V2, rng)} corresponds to the mechanism's source condition; the intervention recreates the mechanism's causal role in the target context.`,
+        differenceFromConventional: `Conventional approaches optimize within the current framing; this borrows the ${mech.field} mechanism of ${mech.name.toLowerCase()}, changing the causal structure rather than the effort level.`,
+        explorationStep: `Run a 2-week bounded test: ${pickStr(TESTS_V2, rng)}, and measure whether the mechanism's signature (e.g., ${mech.appliesWhen.slice(0, 120)}) appears.`,
+        assumptions: [`The ${mech.field} dynamics apply at problem scale`, 'The user can implement the minimal version'],
+        limitations: ['Transfer is structural, not literal', 'Effect sizes unknown in this domain'],
+      });
+    }
+    return {
+      causalPrinciple: `Underlying principle of ${mech.name}: ${mech.mechanism}`,
+      candidates,
+      critique: {
+        survived: (fnv1a(req.requestId) % 10) > 2, // 70% survive
+        invalidAssumptions: [],
+        coherenceNotes: 'Fake critique: mapping holds for the primary feature; secondary features unverified.',
+      },
+    };
+  }
+  if (req.operator === 'recombine') {
+    const mids = [...req.prompt.matchAll(/Mechanism: (sc_[a-z_]+)/g)].map((m) => m[1]!);
+    const pair = mids.length >= 2 ? [mids[0]!, mids[1]!] : ['sc_immune', 'sc_toc_elevation'];
+    const a = getMechanism(pair[0]!) ?? SEED_MECHANISMS[0]!;
+    const b = getMechanism(pair[1]!) ?? SEED_MECHANISMS[1]!;
+    return {
+      candidates: [
+        {
+          title: `${a.name} × ${b.name} hybrid`,
+          proposal: `Combine: ${a.mechanism.slice(0, 140)}; layered with ${b.mechanism.slice(0, 140)}.`,
+          transferStory: `The two mechanisms compose at different causal levels: ${a.name} handles ${pickStr(FEATURES_V2, rng)} while ${b.name} handles sequencing.`,
+          differenceFromConventional: 'Conventional advice addresses one layer; the hybrid restructures two layers at once.',
+          explorationStep: 'Prototype the minimal hybrid for two weeks; compare against single-mechanism variants.',
+          assumptions: ['The mechanisms do not conflict at implementation level'],
+          limitations: ['Hybrid complexity raises failure modes'],
+          parentHypothesisIds: ['hyp_a', 'hyp_b'],
+        },
+      ],
+    };
+  }
+  if (req.operator === 'novelty_judge') {
+    return {
+      vsConventional: num(2, 5),
+      vsSiblings: num(2, 5),
+      transferDistance: num(2, 5),
+      substantiveDifference: num(2, 5),
+      coherence: Math.round((0.5 + rng() * 0.5) * 10) / 10,
+      relevance: Math.round((0.5 + rng() * 0.5) * 10) / 10,
+      uncertainty: Math.round(rng() * 0.5 * 10) / 10,
+      justification: `Fake novelty assessment: candidate ${firstLine(req.prompt).slice(0, 60)} differs from conventional by borrowing a ${pickStr(FIELDS_V2, rng)} mechanism.`,
+      duplicateOf: null,
+    };
+  }
+  if (req.operator === 'refine') {
+    const mid = /Mechanism: (sc_[a-z_]+)/.exec(req.prompt)?.[1] ?? 'sc_immune';
+    const mech = getMechanism(mid) ?? SEED_MECHANISMS[0]!;
+    return {
+      title: `Refined ${mech.name} application`,
+      proposal: `Deepened proposal: ${mech.mechanism.slice(0, 200)} — implemented as a staged, testable program.`,
+      transferStory: `Mechanism faithfully transferred: each causal link mapped to a problem element.`,
+      differenceFromConventional: `Moves from advice-level to mechanism-level change via ${mech.field} dynamics.`,
+      explorationStep: `First concrete step: ${pickStr(TESTS_V2, rng)}.`,
+      assumptions: ['Mechanism preconditions hold'],
+      limitations: ['Novel, unvalidated in this domain'],
     };
   }
   // creative operators: parse requested count from the prompt tail ("Produce exactly N ideas.")

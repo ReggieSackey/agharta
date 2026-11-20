@@ -15,7 +15,9 @@
     "./population": "./src/population.ts",
     "./engine": "./src/engine.ts",
     "./strategies": "./src/strategies.ts",
-    "./types": "./src/types.ts"
+    "./types": "./src/types.ts",
+    "./search": "./src/search/engine2.ts",
+    "./boundary": "./src/search/boundary.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
@@ -24,7 +26,8 @@
   },
   "dependencies": {
     "@agharta/shared": "workspace:*",
-    "zod": "^4.6.0"
+    "zod": "^4.6.0",
+    "@agharta/learning": "workspace:*"
   },
   "optionalDependencies": {},
   "peerDependencies": {
