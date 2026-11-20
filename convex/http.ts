@@ -37,6 +37,7 @@ function timingSafeEqual(a: string, b: string): boolean {
 interface TokenAuth {
   workspaceId: Id<'workspaces'>;
   tokenId: Id<'mcpTokens'>;
+  creatorSubject: string;
 }
 
 async function authenticate(ctx: ActionCtx, request: Request): Promise<TokenAuth | null> {
@@ -50,14 +51,14 @@ async function authenticate(ctx: ActionCtx, request: Request): Promise<TokenAuth
     tokenHash: string;
     revokedAt?: number;
     expiresAt?: number;
-  }>;
+  } & { creatorSubject: string }>;
   const expected = await hashToken(token);
   const now = Date.now();
   for (const c of candidates) {
     if (c.revokedAt) continue;
     if (c.expiresAt && c.expiresAt < now) continue;
     if (timingSafeEqual(c.tokenHash, expected)) {
-      return { workspaceId: c.workspaceId, tokenId: c._id };
+      return { workspaceId: c.workspaceId, tokenId: c._id, creatorSubject: c.creatorSubject };
     }
   }
   return null;
@@ -153,6 +154,174 @@ http.route({
       return Response.json({ error: 'unauthorized' }, { status: 401 });
     }
     return Response.json({ ok: true });
+  }),
+});
+
+
+// ===========================================================================
+// V2: Streamable HTTP MCP endpoint (JSON-RPC 2.0, stateless mode)
+// for ChatGPT apps / remote MCP clients. Token-authenticated like the REST
+// bridge; one POST /mcp route handles initialize / tools/list / tools/call.
+// ===========================================================================
+
+const V2_TOOLS = [
+  {
+    name: 'explore_problem',
+    description:
+      'Start an Agharta experimental creative search. Engine 1 interprets the problem structurally, forms competing hypotheses (guided/explored/wildcard), investigates cross-domain mechanisms, and returns the 2-3 most novel coherent proposals with the mechanism story. Learning runs asynchronously afterward.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        problem: { type: 'string', description: 'Full problem description, including what was already tried and what conventional approaches to move beyond' },
+        domain: { type: 'string', enum: ['product', 'engineering', 'business', 'policy', 'personal', 'other'], description: 'Optional domain hint' },
+        budgetPreset: { type: 'string', enum: ['quick', 'standard', 'deep'], description: 'Search budget (default standard)' },
+      },
+      required: ['problem'],
+    },
+  },
+  {
+    name: 'get_exploration',
+    description:
+      'Fetch an experiment result: status, problem interpretation, hypotheses considered (including rejected paths with reasons), and final proposals with novelty, why they differ, transfer story, and how to explore them.',
+    inputSchema: {
+      type: 'object',
+      properties: { experimentId: { type: 'string' } },
+      required: ['experimentId'],
+    },
+  },
+  {
+    name: 'submit_idea_feedback',
+    description:
+      'Submit feedback on a final proposal (shortlisted / rejected / attempted / succeeded / failed). Feeds the human evidence tier of Engine 2 learning. Missing feedback is never counted as failure.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        experimentId: { type: 'string' },
+        ideaTitle: { type: 'string', description: 'Title of the final proposal' },
+        action: { type: 'string', enum: ['shortlisted', 'rejected', 'attempted', 'succeeded', 'failed'] },
+        reason: { type: 'string' },
+        evidence: { type: 'string' },
+      },
+      required: ['experimentId', 'ideaTitle', 'action'],
+    },
+  },
+  {
+    name: 'get_learning_summary',
+    description:
+      'Summary of Engine 2 learning for the workspace: active map/policy versions, learned edge and feature-weight counts, recent learning runs with promotion-gate decisions, and honest caveats.',
+    inputSchema: { type: 'object', properties: {} },
+  },
+] as const;
+
+function jsonRpcResult(id: unknown, result: unknown): Response {
+  return Response.json({ jsonrpc: '2.0', id, result });
+}
+function jsonRpcError(id: unknown, code: number, message: string): Response {
+  return Response.json({ jsonrpc: '2.0', id, error: { code, message } });
+}
+
+http.route({
+  path: '/mcp',
+  method: 'POST',
+  handler: httpAction(async (ctx, request) => {
+    const auth = await authenticate(ctx, request);
+    if (!auth) return jsonRpcError(null, -32001, 'unauthorized: valid agt_ token required');
+    const msg = (await request.json().catch(() => null)) as {
+      jsonrpc?: string;
+      id?: unknown;
+      method?: string;
+      params?: Record<string, unknown>;
+    } | null;
+    if (!msg || typeof msg.method !== 'string') {
+      return jsonRpcError(null, -32600, 'invalid request');
+    }
+    const { method, id, params } = msg;
+
+    if (method === 'initialize') {
+      return jsonRpcResult(id, {
+        protocolVersion: '2025-03-26',
+        capabilities: { tools: {} },
+        serverInfo: { name: 'agharta', version: '2.0.0' },
+        instructions:
+          'Agharta runs experimental creative searches. Call explore_problem with the full problem (include what was tried); poll get_exploration until completed; results include rejected hypotheses and final proposals with mechanism stories.',
+      });
+    }
+    if (method === 'notifications/initialized' || method.startsWith('notifications/')) {
+      return new Response(null, { status: 202 });
+    }
+    if (method === 'ping') return jsonRpcResult(id, {});
+    if (method === 'tools/list') {
+      return jsonRpcResult(id, { tools: V2_TOOLS });
+    }
+    if (method === 'tools/call') {
+      const name = String(params?.name ?? '');
+      const args = (params?.arguments ?? {}) as Record<string, unknown>;
+      if (name === 'explore_problem') {
+        const problem = String(args.problem ?? '');
+        if (!problem.trim()) return jsonRpcError(id, -32602, 'problem required');
+        const started = await ctx.runMutation(internal.internal.mcpV2.startExperiment, {
+          workspaceId: auth.workspaceId,
+          problemText: problem.slice(0, 8000),
+          domain: String(args.domain ?? 'other'),
+          budgetPreset: String(args.budgetPreset ?? 'standard'),
+          creatorSubject: auth.creatorSubject,
+        });
+        return jsonRpcResult(id, {
+          content: [{
+            type: 'text',
+            text: JSON.stringify({
+              experimentId: started.experimentId,
+              status: 'queued',
+              message: 'Experiment queued. Poll get_exploration with this experimentId; typical fake/dev runs complete in seconds, real model runs in ~1-3 minutes.',
+            }),
+          }],
+        });
+      }
+      if (name === 'get_exploration') {
+        const experimentId = String(args.experimentId ?? '');
+        const result = await ctx.runMutation(internal.internal.mcpV2.getExperiment, {
+          workspaceId: auth.workspaceId,
+          experimentId: experimentId as Id<'experiments'>,
+        });
+        if (!result) return jsonRpcError(id, -32002, 'experiment not found in this workspace');
+        return jsonRpcResult(id, { content: [{ type: 'text', text: JSON.stringify(result) }] });
+      }
+      if (name === 'submit_idea_feedback') {
+        const res = await ctx.runMutation(internal.internal.mcpV2.submitFeedbackV2, {
+          workspaceId: auth.workspaceId,
+          experimentId: String(args.experimentId ?? '') as Id<'experiments'>,
+          ideaTitle: String(args.ideaTitle ?? ''),
+          action: String(args.action ?? ''),
+          reason: args.reason ? String(args.reason) : undefined,
+          evidence: args.evidence ? String(args.evidence) : undefined,
+        });
+        return jsonRpcResult(id, { content: [{ type: 'text', text: JSON.stringify(res) }] });
+      }
+      if (name === 'get_learning_summary') {
+        const result = await ctx.runMutation(internal.internal.mcpV2.learningSummaryV2, {
+          workspaceId: auth.workspaceId,
+        });
+        return jsonRpcResult(id, { content: [{ type: 'text', text: JSON.stringify(result) }] });
+      }
+      return jsonRpcError(id, -32601, `unknown tool: ${name}`);
+    }
+    return jsonRpcError(id, -32601, `method not found: ${method}`);
+  }),
+});
+
+// Lightweight discovery manifest for ChatGPT app registration
+// (OpenAI developer dashboard consumes this shape when configuring an MCP app)
+http.route({
+  path: '/.well-known/mcp-manifest.json',
+  method: 'GET',
+  handler: httpAction(async (_ctx, _request) => {
+    return Response.json({
+      name: 'Agharta',
+      description: 'Experimental creative search engine: makes AI assistants better at discovering novel approaches to problems.',
+      mcp_endpoint: `${process.env.CONVEX_SITE_URL ?? ''}/mcp`,
+      auth: { type: 'bearer', docs: 'Personal tokens (agt_...) issued in the Agharta dashboard under Settings → MCP' },
+      tools: V2_TOOLS.map((t) => ({ name: t.name, description: t.description })),
+    });
   }),
 });
 

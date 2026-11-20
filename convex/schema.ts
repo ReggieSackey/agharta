@@ -190,7 +190,13 @@ export default defineSchema({
 
   ideaFeedback: defineTable({
     workspaceId: v.id('workspaces'),
-    ideaId: v.id('ideas'),
+    /** V1: idea-table id. V2 stores experiment-scoped feedback with ideaId null
+     *  and ideaTitle for display (schema pre-dates optional union ids). */
+    ideaId: v.optional(v.id('ideas')),
+    /** V2: experiment the feedback belongs to */
+    experimentId: v.optional(v.id('experiments')),
+    /** V2: title of the final proposal the feedback targets */
+    ideaTitle: v.optional(v.string()),
     actorSubject: v.string(),
     action: v.string(),
     reason: v.optional(v.string()),
