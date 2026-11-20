@@ -392,3 +392,21 @@ export const loadCredential = internalQuery({
     return { provider: row.provider, encrypted: row.encrypted };
   },
 });
+
+export const loadFeedbackForExperiments = internalQuery({
+  args: { workspaceId: v.id('workspaces'), experimentIds: v.array(v.id('experiments')) },
+  handler: async (ctx, args) => {
+    const rows = await ctx.db
+      .query('ideaFeedback')
+      .withIndex('by_workspace_time', (q) => q.eq('workspaceId', args.workspaceId))
+      .order('desc')
+      .take(500);
+    return rows
+      .filter((r) => r.experimentId && args.experimentIds.includes(r.experimentId))
+      .map((r) => ({
+        experimentId: r.experimentId!,
+        ideaTitle: r.ideaTitle ?? null,
+        action: r.action,
+      }));
+  },
+});

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery, useMutation } from 'convex/react';
+import { useQuery, useMutation, useAction } from 'convex/react';
 import { api } from '@/convex-api';
 import { DashboardShell } from '@/components/DashboardShell';
 
@@ -21,24 +21,7 @@ export default function SettingsPage() {
       <h1 className="mb-6 text-xl font-semibold">Settings</h1>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="panel p-5">
-          <p className="data-label mb-2">workspace</p>
-          <p className="text-sm">Personal workspace — private by default.</p>
-          <p className="mt-2 text-xs text-[var(--color-muted)]">
-            Ideas, feedback, and outcomes remain workspace-scoped. Nothing flows into shared
-            benchmarks or global learning without explicit opt-in.
-          </p>
-        </section>
-
-        <section className="panel p-5">
-          <p className="data-label mb-2">model provider</p>
-          <p className="text-sm">Server-managed. Secrets never appear in the browser.</p>
-          <p className="mt-2 text-xs text-[var(--color-muted)]">
-            Provider selection (<code>AI_PROVIDER</code>) and model IDs live in the Convex backend
-            environment. Unset credentials fall back to the deterministic local engine, clearly
-            labeled in results. Spend is capped per exploration (<code>MAX_RUN_COST_USD</code>).
-          </p>
-        </section>
+        <ByokPanel />
 
         <section className="panel p-5 lg:col-span-2">
           <div className="mb-3 flex items-center justify-between">
@@ -124,5 +107,98 @@ export default function SettingsPage() {
         </section>
       </div>
     </DashboardShell>
+  );
+}
+
+
+function ByokPanel() {
+  const credentials = useQuery(api.credentialsManage.listCredentials, {});
+  const setCredential = useAction(api.credentials.setCredential);
+  const deleteCredential = useMutation(api.credentialsManage.deleteCredential);
+  const [provider, setProvider] = useState('openai');
+  const [apiKey, setApiKey] = useState('');
+  const [model, setModel] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+
+  const save = async () => {
+    setBusy(true); setError(null); setSaved(false);
+    try {
+      await setCredential({ provider, apiKey, model: model || undefined });
+      setApiKey(''); setModel(''); setSaved(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <section className="panel p-5">
+      <p className="data-label mb-2">provider API keys (bring your own)</p>
+      <p className="text-xs text-[var(--color-muted)] mb-3">
+        Keys are encrypted with AES-256-GCM under a per-workspace key before storage and are
+        never shown again, logged, or exposed to MCP clients. Delete anytime; experiments fall
+        back to the server provider or the local deterministic engine.
+      </p>
+      <div className="space-y-2">
+        <div className="flex gap-2">
+          <select value={provider} onChange={(e) => setProvider(e.target.value)} className="rounded border border-[var(--color-line)] px-2 py-1.5 text-xs">
+            {['openai', 'anthropic', 'deepseek', 'glm', 'openai-compatible'].map((p) => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
+          <input
+            type="password"
+            placeholder="API key"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            className="flex-1 rounded border border-[var(--color-line)] px-2 py-1.5 text-xs"
+          />
+        </div>
+        <input
+          placeholder="model id (optional)"
+          value={model}
+          onChange={(e) => setModel(e.target.value)}
+          className="w-full rounded border border-[var(--color-line)] px-2 py-1.5 text-xs"
+        />
+        <button
+          onClick={save}
+          disabled={busy || !apiKey.trim()}
+          className="rounded border border-[var(--color-line)] px-3 py-1.5 text-xs hover:border-[var(--color-blue)] disabled:opacity-50"
+        >
+          {busy ? 'saving…' : 'save key'}
+        </button>
+        {error && <p className="text-xs text-red-600">{error}</p>}
+        {saved && <p className="text-xs text-green-700">saved (encrypted)</p>}
+      </div>
+
+      <div className="mt-4">
+        <p className="data-label mb-1">stored credentials</p>
+        {(credentials ?? []).length === 0 ? (
+          <p className="text-xs text-[var(--color-muted)]">none — server provider / local engine is used</p>
+        ) : (
+          <div className="divide-y border border-[var(--color-line)] rounded">
+            {credentials!.map((c: { provider: string; label?: string; keyFingerprint: string; updatedAt: number }) => (
+              <div key={c.provider} className="flex items-center justify-between px-3 py-2">
+                <div>
+                  <p className="text-xs font-medium">{c.provider}{c.label ? ` — ${c.label}` : ''}</p>
+                  <p className="text-[11px] text-[var(--color-muted)]">
+                    key {c.keyFingerprint.slice(0, 8)}… · updated {new Date(c.updatedAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <button
+                  className="text-[11px] underline text-red-600"
+                  onClick={() => void deleteCredential({ provider: c.provider })}
+                >
+                  delete
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
   );
 }

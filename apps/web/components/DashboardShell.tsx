@@ -6,9 +6,9 @@ import { useAuth } from '@workos-inc/authkit-nextjs/components';
 
 const NAV = [
   { href: '/dashboard', label: 'Dashboard' },
-  { href: '/problems/new', label: 'New problem' },
+  { href: '/experiments', label: 'Experiments' },
+  { href: '/v2learning', label: 'Learning' },
   { href: '/mechanisms', label: 'Mechanisms' },
-  { href: '/learning', label: 'Learning' },
   { href: '/settings', label: 'Settings' },
 ];
 

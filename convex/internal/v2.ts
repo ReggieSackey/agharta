@@ -183,8 +183,37 @@ async function learnAndMaybePromote(
         const rec = ExperimentRecordSchema.parse(p.record);
         return extractObservation(rec);
       })
-      .filter(Boolean);
+      .filter((o): o is NonNullable<typeof o> => o !== null);
     if (observations.length === 0) throw new Error('no parseable observations');
+
+    // human-tier join: shortlisted/rejected feedback on this batch's finals
+    const feedbackRows: Array<{ experimentId: string; ideaTitle: string | null; action: string }> =
+      await ctx.runQuery(internal.internal.v2store.loadFeedbackForExperiments, {
+        workspaceId,
+        experimentIds: pending.map((p) => p.docId),
+      });
+    for (const obs of observations) {
+      const rec = pending.find((p) => p.experimentId === obs.experimentId);
+      const record = rec ? (ExperimentRecordSchema.parse(rec.record)) : null;
+      if (!record) continue;
+      // final proposals' candidateIds → hypotheses → human counts
+      const candidateToHypothesis = new Map(record.candidates.map((c) => [c.id, c.hypothesisId]));
+      const titleToCandidate = new Map(
+        record.finalProposals.map((f) => {
+          const cand = record.candidates.find((c) => c.id === f.candidateId);
+          return [f.title, cand?.id ?? null];
+        })
+      );
+      for (const fb of feedbackRows.filter((f) => f.experimentId === obs.experimentId)) {
+        const candId = fb.ideaTitle ? titleToCandidate.get(fb.ideaTitle) : null;
+        const hypId = candId ? candidateToHypothesis.get(candId) : null;
+        if (!hypId) continue;
+        const h = obs.hypothesisOutcomes.find((x) => x.hypothesisId === hypId);
+        if (!h) continue;
+        if (fb.action === 'shortlisted' || fb.action === 'succeeded' || fb.action === 'attempted') h.humanShortlisted += 1;
+        if (fb.action === 'rejected' || fb.action === 'failed') h.humanRejected += 1;
+      }
+    }
 
     const result = learn(map, policy, observations as never, undefined, 42);
     const { map: candidateMap, policy: candidatePolicy } = result;
