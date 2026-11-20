@@ -46,6 +46,7 @@ export const start = mutation({
       status: 'queued',
       mapVersionId: '',
       policyVersionId: '',
+      processedByLearning: false,
       startedAt: now,
     });
     await ctx.scheduler.runAfter(0, internal.internal.v2.runV2Experiment, {

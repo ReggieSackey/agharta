@@ -240,7 +240,8 @@ export default defineSchema({
 
   promotionAudit: defineTable({
     workspaceId: v.id('workspaces'),
-    experimentId: v.id('optimizationExperiments'),
+    /** V1 strategy promotions; null for V2 artifact-level promotions */
+    experimentId: v.optional(v.id('optimizationExperiments')),
     fromVersion: v.string(),
     toVersion: v.string(),
     decision: v.string(),

@@ -153,7 +153,7 @@ export const promoteArtifacts = internalMutation({
     // audit
     await ctx.db.insert('promotionAudit', {
       workspaceId: args.workspaceId,
-      experimentId: null as never, // v2 promotions are artifact-level
+      experimentId: undefined, // v2 promotions are artifact-level
       fromVersion: 'artifacts',
       toVersion: `${args.mapVersionId}|${args.policyVersionId}`,
       decision: args.decision,
@@ -363,7 +363,7 @@ export const recordEvaluationAndDecide = internalMutation({
       await ctx.db.patch(policies[0]!._id, { isActive: true });
       await ctx.db.insert('promotionAudit', {
         workspaceId: args.workspaceId,
-        experimentId: null as never,
+        experimentId: undefined,
         fromVersion: 'artifacts',
         toVersion: `${args.candidateMapVersionId}|${args.candidatePolicyVersionId}`,
         decision: 'auto_promote',
