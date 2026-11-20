@@ -99,11 +99,21 @@ User requirement: switchable models across DeepSeek, GLM, OpenAI, Anthropic, etc
 
 1. **Real credentials smoke tests** — set `OPENAI_API_KEY` in Convex env + cost cap, run one real exploration and the real-model benchmark; set real WorkOS client/API key and run the authenticated E2E flow end-to-end.
 2. **Rotate dev secrets** — `AGHARTA_TOKEN_HASH_KEY` and `WORKOS_COOKIE_PASSWORD` are dev placeholders.
-3. HTTP-bridge rate limiting + token attempt lockout (see SECURITY gaps).
+3. ~~HTTP-bridge rate limiting + token attempt lockout~~ **closed in session 6** (verified live 6/6).
 4. Learning-page challenger flow UI polish; scheduler for periodic `recomputeOperatorStats` after feedback bursts.
 5. GitHub Actions CI (typecheck/test/build matrix).
 6. External retrieval for source concepts (SSRF-guarded); GEPA-style prompt optimization experiments.
 7. Deploy web (Vercel) + `npx convex deploy` for prod deployment.
+
+## 2026-11-20 (session 6 — security gaps closed)
+
+All three flagged security gaps implemented and verified live:
+
+1. **Per-IP rate limiting** — `authAttempts` counters + `checkAndConsumeIp` mutation (60 req / 10 min window per IP, atomic check+consume in one mutation). Applied to all 5 authenticated HTTP routes (4 REST + `/mcp` JSON-RPC). Exceeding → HTTP 429 with `Retry-After`.
+2. **Token attempt lockout** — 5 failed auths per token prefix → 15-minute lockout, checked *before* any hash work. Successful auth clears failures. Verified live: 5 forgeries lock the prefix; the CORRECT token is then refused; a different prefix is unaffected; admin can clear the lockout early.
+3. **Security audit log** — `securityAudit` table: auth denials (with prefix + failure count), rate-limit hits, credential create/replace/delete, token create/revoke, manual rollbacks. No secret material logged. Admin query surfaces recent entries.
+
+**Live evidence:** `scripts/security-guard-live.ts` → **6/6** on `kindhearted-rook-357`. Full regression after: v2-mcp-live **11/11**, v2-byok-live **7/7**, v2-loop-live **14/14** — the guard does not impede legitimate traffic (each suite makes ~10-20 requests under the 60/window budget).
 
 ## 2026-11-19 (session 5 — V2 build: two-engine architecture)
 

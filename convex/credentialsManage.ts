@@ -4,6 +4,7 @@
  */
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
+import { internal } from './_generated/api';
 import { requireIdentity, ensureUser, ensureDefaultWorkspace } from './auth';
 
 async function myWorkspace(ctx: any): Promise<{ workspaceId: any; subject: string }> {
@@ -42,6 +43,13 @@ export const deleteCredential = mutation({
       .unique();
     if (existing) {
       await ctx.db.delete(existing._id);
+      await ctx.runMutation(internal.internal.guard.audit, {
+        workspaceId,
+        category: 'credential',
+        action: 'credential_deleted',
+        detail: JSON.stringify({ provider: args.provider }),
+        at: Date.now(),
+      });
       return { deleted: true };
     }
     return { deleted: false };

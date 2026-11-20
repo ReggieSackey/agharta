@@ -45,3 +45,11 @@ Verified by test: the integration script's "intruder denied" check holds a *diff
 - No per-IP rate limiting on the HTTP bridge yet (Convex doesn't provide it natively; candidate: edge proxy or convex-rate-liter component).
 - Token attempt counting (lockout after N failures) is not yet implemented.
 - Audit logging is currently limited to promotion decisions (`promotionAudit`).
+
+
+## Rate limiting & lockout (2026-11-20, verified live)
+
+- Per-IP budget: 60 requests / 10-minute window on every authenticated HTTP route (REST + `/mcp`). Exceeding returns `429` with `Retry-After`; the event is audit-logged.
+- Token lockout: 5 failed authentications sharing a token prefix trigger a 15-minute lockout checked before hash verification. A successful authentication resets the failure counter.
+- Audit trail (`securityAudit`): auth denials, rate-limit hits, credential lifecycle (create/replace/delete — provider name only, never key material), token create/revoke, manual rollbacks.
+- Live verification: `scripts/security-guard-live.ts` (6/6) — forged tokens rejected, lockout engages and blocks the legitimate token for that prefix, other prefixes unaffected, audit entries written, recovery after admin clear.

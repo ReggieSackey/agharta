@@ -381,6 +381,30 @@ export default defineSchema({
   })
     .index('by_workspace', ['workspaceId'])
     .index('by_workspace_provider', ['workspaceId', 'provider']),
+
+  /** HTTP auth-failure counters → automatic token lockout (security gap fix) */
+  authAttempts: defineTable({
+    /** keyed bucket: token prefix tried, or 'ip:<x-forwarded-for>' */
+    bucket: v.string(),
+    failures: v.number(),
+    firstFailureAt: v.number(),
+    lastFailureAt: v.number(),
+    lockedUntil: v.optional(v.number()),
+  }).index('by_bucket', ['bucket']),
+
+  /** Security-relevant audit log (auth denials, credential ops, rollbacks) */
+  securityAudit: defineTable({
+    workspaceId: v.optional(v.id('workspaces')),
+    category: v.string(), // auth_denied | credential | rollback | rate_limited | token
+    action: v.string(),
+    /** detail payload (no secrets) */
+    detail: v.optional(v.string()),
+    /** client ip when known */
+    ip: v.optional(v.string()),
+    at: v.number(),
+  })
+    .index('by_time', ['at'])
+    .index('by_category_time', ['category', 'at']),
   /** dev-only demo data marker (never shown as real performance) */
   demoData: defineTable({
     workspaceId: v.id('workspaces'),

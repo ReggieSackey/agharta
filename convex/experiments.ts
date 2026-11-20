@@ -222,6 +222,17 @@ export const rollbackTo = mutation({
       decision: 'rollback',
       rationale: args.reason ?? 'manual rollback via dashboard',
     });
+    await ctx.runMutation(internal.internal.guard.audit, {
+      workspaceId,
+      category: 'rollback',
+      action: 'manual_rollback',
+      detail: JSON.stringify({
+        mapVersionId: args.mapVersionId,
+        policyVersionId: args.policyVersionId,
+        reason: args.reason ?? null,
+      }),
+      at: Date.now(),
+    });
     return { rolledBackTo: { map: args.mapVersionId, policy: args.policyVersionId } };
   },
 });

@@ -5,6 +5,7 @@
  */
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
+import { internal } from './_generated/api';
 import { requireWorkspaceMembership } from './auth';
 
 /** agt_<40 chars base62>; prefix is the first 8 chars used for lookup. */
@@ -49,6 +50,13 @@ export const create = mutation({
       tokenHash,
       label: args.label ?? 'MCP token',
     });
+    await ctx.runMutation(internal.internal.guard.audit, {
+      workspaceId: args.workspaceId,
+      category: 'token',
+      action: 'token_created',
+      detail: JSON.stringify({ prefix, label: args.label ?? 'MCP token' }),
+      at: Date.now(),
+    });
     // plaintext shown exactly once
     return { id, token: plaintext };
   },
@@ -61,6 +69,13 @@ export const revoke = mutation({
     if (!token) throw new Error('NOT_FOUND');
     await requireWorkspaceMembership(ctx, token.workspaceId);
     await ctx.db.patch(args.tokenId, { revokedAt: Date.now() });
+    await ctx.runMutation(internal.internal.guard.audit, {
+      workspaceId: token.workspaceId,
+      category: 'token',
+      action: 'token_revoked',
+      detail: JSON.stringify({ prefix: token.tokenPrefix }),
+      at: Date.now(),
+    });
     return { ok: true };
   },
 });

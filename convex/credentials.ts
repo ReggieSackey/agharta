@@ -3,6 +3,7 @@
  * BYOK setCredential action (node runtime for AES-GCM).
  * Auth + workspace resolution + storage happen in the internal mutation the
  * action calls, keeping the plaintext key in memory only for this action.
+ * All credential operations are security-audit-logged (no key material).
  */
 import { action } from './_generated/server';
 import { v } from 'convex/values';
@@ -40,6 +41,13 @@ export const setCredential = action({
         label: args.label,
       }
     );
+    await ctx.runMutation(internal.internal.guard.audit, {
+      workspaceId: ws.workspaceId,
+      category: 'credential',
+      action: result.updated ? 'credential_replaced' : 'credential_created',
+      detail: JSON.stringify({ provider: args.provider, label: args.label ?? null }),
+      at: Date.now(),
+    });
     return result;
   },
 });

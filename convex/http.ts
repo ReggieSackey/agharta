@@ -40,26 +40,30 @@ interface TokenAuth {
   creatorSubject: string;
 }
 
-async function authenticate(ctx: ActionCtx, request: Request): Promise<TokenAuth | null> {
-  const auth = request.headers.get('authorization') ?? '';
-  const token = auth.startsWith('Bearer ') ? auth.slice(7).trim() : '';
-  if (!token.startsWith('agt_')) return null;
-  const prefix = token.slice(0, 12);
-  const candidates = (await ctx.runQuery(internal.internal.mcp.lookupTokenByPrefix, { prefix })) as Array<{
-    _id: Id<'mcpTokens'>;
-    workspaceId: Id<'workspaces'>;
-    tokenHash: string;
-    revokedAt?: number;
-    expiresAt?: number;
-  } & { creatorSubject: string }>;
-  const expected = await hashToken(token);
-  const now = Date.now();
-  for (const c of candidates) {
-    if (c.revokedAt) continue;
-    if (c.expiresAt && c.expiresAt < now) continue;
-    if (timingSafeEqual(c.tokenHash, expected)) {
-      return { workspaceId: c.workspaceId, tokenId: c._id, creatorSubject: c.creatorSubject };
-    }
+async function clientIp(request: Request): Promise<string> {
+  // Convex sites sit behind a proxy; x-forwarded-for is set by the platform.
+  const fwd = request.headers.get('x-forwarded-for') ?? '';
+  return fwd.split(',')[0]?.trim() || 'unknown';
+}
+
+/** Per-IP request budget. Returns a 429 Response when exceeded. */
+async function rateLimit(ctx: ActionCtx, request: Request): Promise<Response | null> {
+  const ip = await clientIp(request);
+  const state = await ctx.runMutation(internal.internal.guard.checkAndConsumeIp, { ip, now: Date.now() });
+  if (!state.allowed) {
+    await ctx.runMutation(internal.internal.guard.audit, {
+      category: 'rate_limited',
+      action: 'ip_limit_exceeded',
+      detail: JSON.stringify({ ip, retryAfterMs: state.retryAfterMs ?? 0 }),
+      ip,
+      at: Date.now(),
+    });
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    headers.set('Retry-After', String(Math.max(1, Math.ceil((state.retryAfterMs ?? 60000) / 1000))));
+    return new Response(
+      JSON.stringify({ error: 'rate limited', retryAfterMs: state.retryAfterMs ?? 0 }),
+      { status: 429, headers }
+    );
   }
   return null;
 }
@@ -69,12 +73,50 @@ function mcpDashboardUrl(explorationId: string): string {
   return `${base}/explorations/${explorationId}`;
 }
 
+async function authenticate(ctx: ActionCtx, request: Request): Promise<TokenAuth | null> {
+  const auth = request.headers.get('authorization') ?? '';
+  const token = auth.startsWith('Bearer ') ? auth.slice(7).trim() : '';
+  if (!token.startsWith('agt_')) {
+    return null;
+  }
+  const prefix = token.slice(0, 12);
+  const now = Date.now();
+  // lockout check before doing any hash work
+  const lock = await ctx.runQuery(internal.internal.guard.tokenLockStatus, { prefix, now });
+  if (lock.locked) {
+    return null;
+  }
+  const candidates = (await ctx.runQuery(internal.internal.mcp.lookupTokenByPrefix, { prefix })) as Array<{
+    _id: Id<'mcpTokens'>;
+    workspaceId: Id<'workspaces'>;
+    tokenHash: string;
+    revokedAt?: number;
+    expiresAt?: number;
+  } & { creatorSubject: string }>;
+  const expected = await hashToken(token);
+  for (const c of candidates) {
+    if (c.revokedAt) continue;
+    if (c.expiresAt && c.expiresAt < now) continue;
+    if (timingSafeEqual(c.tokenHash, expected)) {
+      // success clears failure state
+      await ctx.runMutation(internal.internal.guard.clearAuthFailures, { prefix });
+      return { workspaceId: c.workspaceId, tokenId: c._id, creatorSubject: c.creatorSubject };
+    }
+  }
+  // failure: count it (may escalate to lockout) + audit
+  const ip = await clientIp(request);
+  await ctx.runMutation(internal.internal.guard.recordAuthFailure, { prefix, now, ip });
+  return null;
+}
+
 const unauthorized = () => Response.json({ error: 'unauthorized' }, { status: 401 });
 
 http.route({
   path: '/mcp/explore_problem',
   method: 'POST',
   handler: httpAction(async (ctx, request) => {
+    const limited = await rateLimit(ctx, request);
+    if (limited) return limited;
     const auth = await authenticate(ctx, request);
     if (!auth) return unauthorized();
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
@@ -98,6 +140,8 @@ http.route({
   path: '/mcp/get_exploration',
   method: 'POST',
   handler: httpAction(async (ctx, request) => {
+    const limited = await rateLimit(ctx, request);
+    if (limited) return limited;
     const auth = await authenticate(ctx, request);
     if (!auth) return unauthorized();
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
@@ -115,6 +159,8 @@ http.route({
   path: '/mcp/submit_idea_feedback',
   method: 'POST',
   handler: httpAction(async (ctx, request) => {
+    const limited = await rateLimit(ctx, request);
+    if (limited) return limited;
     const auth = await authenticate(ctx, request);
     if (!auth) return unauthorized();
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
@@ -133,6 +179,8 @@ http.route({
   path: '/mcp/get_learning_summary',
   method: 'POST',
   handler: httpAction(async (ctx, request) => {
+    const limited = await rateLimit(ctx, request);
+    if (limited) return limited;
     const auth = await authenticate(ctx, request);
     if (!auth) return unauthorized();
     const result = await ctx.runQuery(internal.internal.mcp.learningSummary, { workspaceId: auth.workspaceId });
@@ -224,6 +272,8 @@ http.route({
   path: '/mcp',
   method: 'POST',
   handler: httpAction(async (ctx, request) => {
+    const limited = await rateLimit(ctx, request);
+    if (limited) return limited;
     const auth = await authenticate(ctx, request);
     if (!auth) return jsonRpcError(null, -32001, 'unauthorized: valid agt_ token required');
     const msg = (await request.json().catch(() => null)) as {

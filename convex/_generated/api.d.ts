@@ -19,6 +19,7 @@ import type * as ideas from "../ideas.js";
 import type * as internal_credentialsAuth from "../internal/credentialsAuth.js";
 import type * as internal_credentialsStore from "../internal/credentialsStore.js";
 import type * as internal_crypto from "../internal/crypto.js";
+import type * as internal_guard from "../internal/guard.js";
 import type * as internal_learning from "../internal/learning.js";
 import type * as internal_mcp from "../internal/mcp.js";
 import type * as internal_mcpV2 from "../internal/mcpV2.js";
@@ -53,6 +54,7 @@ declare const fullApi: ApiFromModules<{
   "internal/credentialsAuth": typeof internal_credentialsAuth;
   "internal/credentialsStore": typeof internal_credentialsStore;
   "internal/crypto": typeof internal_crypto;
+  "internal/guard": typeof internal_guard;
   "internal/learning": typeof internal_learning;
   "internal/mcp": typeof internal_mcp;
   "internal/mcpV2": typeof internal_mcpV2;
